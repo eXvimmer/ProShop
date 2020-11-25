@@ -1,14 +1,22 @@
 {
-  "name": "propshop",
+  "name": "proshop_backend",
   "version": "1.0.0",
   "description": "full-stack MERN e-commerce shopping app",
   "main": "server.js",
   "scripts": {
-    "start": "node backend/server.js"
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "cd frontend && npm start",
+    "build": "cd frontend && npm run build",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Mustafa Hayati",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.6"
   }
 }
