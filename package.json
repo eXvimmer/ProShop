@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "full-stack MERN e-commerce shopping app",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
