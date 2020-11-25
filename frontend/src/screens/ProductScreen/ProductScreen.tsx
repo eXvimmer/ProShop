@@ -1,9 +1,6 @@
-import React, { FC, Fragment } from "react";
-import {
-  Link,
-  Redirect,
-  RouteComponentProps,
-} from "react-router-dom";
+import React, { FC, Fragment, useEffect, useState } from "react";
+import axios from "axios";
+import { Link, RouteComponentProps } from "react-router-dom";
 import {
   Button,
   Card,
@@ -11,21 +8,43 @@ import {
   Image,
   ListGroup,
   Row,
+  Spinner,
 } from "react-bootstrap";
 import { IProduct } from "../HomeScreen/HomeScreen";
 import Rating from "../../components/Rating/Rating";
-import products from "../../products";
 
 const ProductScreen: FC<RouteComponentProps<{ id: string }>> = ({
   match: {
     params: { id },
   },
 }) => {
-  const product: IProduct | undefined = products.find(
-    p => p._id === id
-  );
+  const [product, setProduct] = useState<IProduct | null>(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data } = await axios.get<IProduct | null>(
+        `/api/products/${id}`
+      );
+      setProduct(data);
+    };
+
+    fetchProduct();
+  }, [id]);
+
   if (!product) {
-    return <Redirect to="/" />;
+    // TODO: change this if it's necessary
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Spinner animation="border" />
+      </div>
+    );
   }
   const {
     name,

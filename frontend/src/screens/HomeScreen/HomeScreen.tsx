@@ -1,7 +1,7 @@
-import React, { FC, Fragment } from "react";
+import React, { FC, Fragment, useEffect, useState } from "react";
+import axios from "axios";
 import { Col, Row } from "react-bootstrap";
 import Product from "../../components/Product/Product";
-import products from "../../products";
 
 export interface IProduct {
   _id: string;
@@ -17,6 +17,17 @@ export interface IProduct {
 }
 
 const HomeScreen: FC = () => {
+  const [products, setProducts] = useState<IProduct[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data } = await axios.get<IProduct[]>("/api/products");
+      setProducts(data);
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <Fragment>
       <h1>Latest Products</h1>
