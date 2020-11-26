@@ -9,7 +9,9 @@
     "server": "nodemon backend/server.js",
     "client": "cd frontend && npm start",
     "build": "cd frontend && npm run build",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "node backend/seeder",
+    "data:destroy": "node backend/seeder -d"
   },
   "author": "Mustafa Hayati",
   "license": "ISC",

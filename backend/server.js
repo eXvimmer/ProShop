@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 // NOTE: files should have .js extension
-import products from "../data/products.js";
+import products from "./data/products.js";
 import connectDB from "./config/db.js";
 
 dotenv.config();
