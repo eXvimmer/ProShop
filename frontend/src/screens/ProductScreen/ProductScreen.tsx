@@ -32,7 +32,7 @@ const ProductScreen: FC<RouteComponentProps<{ id: string }>> = ({
   }, [id]);
 
   if (!product) {
-    // TODO: change this if it's necessary
+    // TODO: change this if it's necessary. Move it to it's own component.
     return (
       <div
         style={{
