@@ -37,3 +37,17 @@ export const addToCart: ActionCreator<
     );
   }
 };
+
+export const removeFromCart: ActionCreator<
+  ThunkAction<Promise<void>, IApplicationState, string, CartActions>
+> = (id: string) => async (dispatch, getState) => {
+  dispatch({
+    type: CartActionTypes.CART_REMOVE_ITEM,
+    payload: id,
+  });
+
+  localStorage.setItem(
+    "cartItems",
+    JSON.stringify(getState().cart.cartItems)
+  );
+};

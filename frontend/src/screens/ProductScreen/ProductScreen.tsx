@@ -33,7 +33,7 @@ const ProductScreen: FC<RouteComponentProps<{ id: string }>> = ({
   },
   history,
 }) => {
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   const dispatch: ThunkDispatch<
     IApplicationState,

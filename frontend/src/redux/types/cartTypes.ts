@@ -19,7 +19,7 @@ export interface ICartAddItem {
 
 export interface ICartRemoveItem {
   type: CartActionTypes.CART_REMOVE_ITEM;
-  payload: ICartItem;
+  payload: string;
 }
 
 export type CartActions = ICartAddItem | ICartRemoveItem;
