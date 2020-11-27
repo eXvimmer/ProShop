@@ -2,7 +2,6 @@ import React, {
   ChangeEvent,
   FC,
   Fragment,
-  MouseEvent,
   useEffect,
   useState,
 } from "react";
