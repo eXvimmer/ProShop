@@ -4,10 +4,10 @@ import { Col, Row } from "react-bootstrap";
 import Product from "../../components/Product/Product";
 import {
   IProduct,
-  IProductState,
-  ProductActions,
+  IProductListState,
+  ProductListActions,
 } from "../../redux/types/productTypes";
-import { productsListRequest } from "../../redux/actions/productActions";
+import { listProducts } from "../../redux/actions/productActions";
 import { IApplicationState } from "../../redux/store/store";
 import { ThunkDispatch } from "redux-thunk";
 import Loader from "./../../components/Loader/Loader";
@@ -22,7 +22,7 @@ const HomeScreen: FC = () => {
   const dispatch: ThunkDispatch<
     IApplicationState,
     null,
-    ProductActions
+    ProductListActions
   > = useDispatch();
   /* NOTE
    * We use useSelector here. It's kind of a combination of
@@ -30,14 +30,15 @@ const HomeScreen: FC = () => {
    * use mapStateToProps here. Because we used useSelector
    * instead.
    */
-  const productList = useSelector<IApplicationState, IProductState>(
-    state => state.productList
-  );
+  const productList = useSelector<
+    IApplicationState,
+    IProductListState
+  >(state => state.productList);
 
   const { error, loading, products } = productList;
 
   useEffect(() => {
-    dispatch(productsListRequest());
+    dispatch(listProducts());
   }, [dispatch]);
 
   return (
