@@ -9,13 +9,11 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 import rootReducer from "../reducers/rootReducer";
-// import { IUserState } from "../types/userTypes";
-// import { ICartState } from "../types/cartTypes";
-// import { IDirectoryState } from "../types/directoryTypes";
-// import { IShopState } from "../types/shopTypes";
-// import rootSaga from "../saga/rootSaga";
+import { IProductState } from "../types/productTypes";
 
-export interface IApplicationState {}
+export interface IApplicationState {
+  productList: IProductState;
+}
 
 const middlewares: Middleware[] = [thunk];
 

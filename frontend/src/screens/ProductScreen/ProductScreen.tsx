@@ -10,8 +10,8 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-import { IProduct } from "../HomeScreen/HomeScreen";
 import Rating from "../../components/Rating/Rating";
+import { IProduct } from "../../redux/types/productTypes";
 
 const ProductScreen: FC<RouteComponentProps<{ id: string }>> = ({
   match: {

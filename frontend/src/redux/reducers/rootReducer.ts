@@ -1,10 +1,9 @@
 import { combineReducers } from "redux";
 import { IApplicationState } from "../store/store";
-// import { userReducer } from "./userReducer";
-// import { cartReducer } from "./cartReducer";
-// import { directoryReducer } from "./directoryReducer";
-// import { shopReducer } from "./shopReducer";
+import { productListReducer } from "./productReducer";
 
-const rootReducer = combineReducers<IApplicationState>({});
+const rootReducer = combineReducers<IApplicationState>({
+  productList: productListReducer,
+});
 
 export default rootReducer;

@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { IProduct } from "../../screens/HomeScreen/HomeScreen";
+import { IProduct } from "../../redux/types/productTypes";
 import Rating from "../Rating/Rating";
 
 interface IPorductProps {
