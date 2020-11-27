@@ -5,6 +5,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import ProductScreen from "./screens/ProductScreen/ProductScreen";
+import CartScreen from "./screens/CartScreen/CartScreen";
 
 const App: FC = () => {
   return (
@@ -15,6 +16,10 @@ const App: FC = () => {
           <Switch>
             <Route exact path="/" component={HomeScreen} />
             <Route path="/product/:id" component={ProductScreen} />
+            {/* NOTE
+             * /cart/:id? means that id is optional
+             */}
+            <Route path="/cart/:id?" component={CartScreen} />
           </Switch>
         </Container>
       </main>

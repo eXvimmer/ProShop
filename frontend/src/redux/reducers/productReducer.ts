@@ -60,7 +60,7 @@ export const productDetailsReducer: Reducer<
       return {
         ...state,
         loading: true,
-        errro: "",
+        error: "",
       };
 
     case ProductActionTypes.PRODUCT_DETAILS_SUCCESS:
