@@ -1,13 +1,17 @@
 import React, { FC, Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Row, Spinner } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import Product from "../../components/Product/Product";
 import {
   IProduct,
   IProductState,
+  ProductActions,
 } from "../../redux/types/productTypes";
 import { productsListRequest } from "../../redux/actions/productActions";
 import { IApplicationState } from "../../redux/store/store";
+import { ThunkDispatch } from "redux-thunk";
+import Loader from "./../../components/Loader/Loader";
+import Message from "../../components/Message/Message";
 
 const HomeScreen: FC = () => {
   /* NOTE
@@ -15,8 +19,11 @@ const HomeScreen: FC = () => {
    * This is an alternative for connecting the function to
    * the store and using mapDispatchToProps
    */
-  /* TODO: find the dispatch type */
-  const dispatch = useDispatch();
+  const dispatch: ThunkDispatch<
+    IApplicationState,
+    null,
+    ProductActions
+  > = useDispatch();
   /* NOTE
    * We use useSelector here. It's kind of a combination of
    * reselect package and connect funciton. We don't have to
@@ -37,18 +44,9 @@ const HomeScreen: FC = () => {
     <Fragment>
       <h1>Latest Products</h1>
       {loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-          }}
-        >
-          <Spinner animation="border" />
-        </div>
+        <Loader />
       ) : error ? (
-        <h3>{error}</h3>
+        <Message variant="danger">{error}</Message>
       ) : (
         <Row>
           {products.map((product: IProduct) => {

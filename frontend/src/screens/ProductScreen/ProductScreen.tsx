@@ -8,10 +8,10 @@ import {
   Image,
   ListGroup,
   Row,
-  Spinner,
 } from "react-bootstrap";
 import Rating from "../../components/Rating/Rating";
 import { IProduct } from "../../redux/types/productTypes";
+import Loader from "../../components/Loader/Loader";
 
 const ProductScreen: FC<RouteComponentProps<{ id: string }>> = ({
   match: {
@@ -32,19 +32,7 @@ const ProductScreen: FC<RouteComponentProps<{ id: string }>> = ({
   }, [id]);
 
   if (!product) {
-    // TODO: change this if it's necessary. Move it to it's own component.
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <Spinner animation="border" />
-      </div>
-    );
+    return <Loader />;
   }
   const {
     name,
@@ -74,7 +62,7 @@ const ProductScreen: FC<RouteComponentProps<{ id: string }>> = ({
             </ListGroup.Item>
             <ListGroup.Item>Price: ${price}</ListGroup.Item>
             <ListGroup.Item>
-              Description: ${description}
+              Description: {description}
             </ListGroup.Item>
           </ListGroup>
         </Col>
