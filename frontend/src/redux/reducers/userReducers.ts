@@ -4,6 +4,7 @@ import {
   IUserDetailsState,
   IUserLoginState,
   IUserRegisterState,
+  IUserUpdateProfileState,
   UserActions,
   UserActionTypes,
 } from "../types/userTypes";
@@ -118,6 +119,48 @@ export const userDetailsReducer: Reducer<
         ...state,
         loading: false,
         error: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+const initialUserUpdateProfileState: IUserUpdateProfileState = {
+  userInfo: null,
+  loading: false,
+  error: "",
+  success: false,
+};
+
+export const userUpdateProfileReducer: Reducer<
+  IUserUpdateProfileState,
+  UserActions
+> = (state = initialUserUpdateProfileState, action) => {
+  switch (action.type) {
+    case UserActionTypes.USER_UPDATE_PROFILE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        success: false,
+        error: "",
+      };
+
+    case UserActionTypes.USER_UPDATE_PROFILE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: "",
+        userInfo: action.payload,
+        success: true,
+      };
+
+    case UserActionTypes.USER_UPDATE_PROFILE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+        success: false,
       };
 
     default:

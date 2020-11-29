@@ -5,10 +5,14 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import {
   IUserDetailsState,
   IUserLoginState,
+  IUserUpdateProfileState,
   UserActions,
 } from "../../redux/types/userTypes";
 import { IApplicationState } from "../../redux/store/store";
-import { getUserDetails } from "../../redux/actions/userActions";
+import {
+  getUserDetails,
+  updateUserProfile,
+} from "../../redux/actions/userActions";
 import Message from "../../components/Message/Message";
 import Loader from "../../components/Loader/Loader";
 import { ThunkDispatch } from "redux-thunk";
@@ -42,6 +46,13 @@ const ProfileScreen: FC<RouteComponentProps> = ({
 
   const { userInfo } = userLogin;
 
+  const userUpdateProfile = useSelector<
+    IApplicationState,
+    IUserUpdateProfileState
+  >(state => state.userUpdateProfile);
+
+  const { success } = userUpdateProfile;
+
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
@@ -64,7 +75,16 @@ const ProfileScreen: FC<RouteComponentProps> = ({
       setConfirmPassword("");
     } else {
       setMessage("");
-      // dispatch()
+      if (user) {
+        dispatch(
+          updateUserProfile({
+            _id: user._id,
+            name,
+            password,
+            email,
+          })
+        );
+      }
     }
   };
   return (
@@ -73,6 +93,11 @@ const ProfileScreen: FC<RouteComponentProps> = ({
         <h2>User Profile</h2>
         {message && <Message variant="danger">{message}</Message>}
         {error && <Message variant="danger">{error}</Message>}
+        {success && (
+          <Message variant="success">
+            User data updated successfully!
+          </Message>
+        )}
         {loading && <Loader />}
         <Form onSubmit={onUpdateProfileSubmit}>
           <Form.Group controlId="name">

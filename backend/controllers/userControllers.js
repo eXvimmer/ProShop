@@ -1,3 +1,4 @@
+// TODO: add validators to user schema
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
@@ -97,7 +98,9 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
       user.password = req.body.password;
     }
 
-    const updatedUser = await user.save();
+    const updatedUser = await user.save({
+      validateBeforeSave: true,
+    });
 
     res.json({
       _id: updatedUser._id,

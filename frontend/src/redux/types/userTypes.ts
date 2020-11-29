@@ -21,6 +21,10 @@ export enum UserActionTypes {
   USER_DETAILS_REQUEST = "USER_DETAILS_REQUEST",
   USER_DETAILS_SUCCESS = "USER_DETAILS_SUCCESS",
   USER_DETAILS_FAIL = "USER_DETAILS_FAIL",
+  USER_UPDATE_PROFILE_REQUEST = "USER_UPDATE_PROFILE_REQUEST",
+  USER_UPDATE_PROFILE_SUCCESS = "USER_UPDATE_PROFILE_SUCCESS",
+  USER_UPDATE_PROFILE_FAIL = "USER_UPDATE_PROFILE_FAIL",
+  USER_UPDATE_PROFILE_RESET = "USER_UPDATE_PROFILE_RESET",
 }
 
 export interface IUserLoginRequest {
@@ -65,6 +69,22 @@ export interface IUserDetailsFail {
   payload: string;
 }
 
+export interface IUserUpdateProfileRequest {
+  type: UserActionTypes.USER_UPDATE_PROFILE_REQUEST;
+}
+export interface IUserUpdateProfileSuccess {
+  type: UserActionTypes.USER_UPDATE_PROFILE_SUCCESS;
+  payload: IUserInfo;
+}
+export interface IUserUpdateProfileFail {
+  type: UserActionTypes.USER_UPDATE_PROFILE_FAIL;
+  payload: string;
+}
+
+export interface IUserUpdateProfileReset {
+  type: UserActionTypes.USER_UPDATE_PROFILE_RESET;
+}
+
 export type UserActions =
   | IUserLoginRequest
   | IUserLoginSuccess
@@ -75,7 +95,11 @@ export type UserActions =
   | IUserRegisterFail
   | IUserDetailsRequest
   | IUserDetailsSuccess
-  | IUserDetailsFail;
+  | IUserDetailsFail
+  | IUserUpdateProfileRequest
+  | IUserUpdateProfileSuccess
+  | IUserUpdateProfileFail
+  | IUserUpdateProfileReset;
 
 export interface IUserLoginState {
   loading: boolean;
@@ -93,4 +117,11 @@ export interface IUserDetailsState {
   user: IUserInfo | null;
   loading: boolean;
   error: string;
+}
+
+export interface IUserUpdateProfileState {
+  loading: boolean;
+  userInfo: IUserInfo | null;
+  error: string;
+  success: boolean;
 }

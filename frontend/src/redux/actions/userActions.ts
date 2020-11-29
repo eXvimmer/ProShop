@@ -147,3 +147,44 @@ export const getUserDetails: ActionCreator<
     });
   }
 };
+
+export const updateUserProfile: ActionCreator<
+  ThunkAction<Promise<void>, IApplicationState, any, UserActions>
+> = (user: any) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const token = userInfo ? userInfo.token : "";
+
+    dispatch({
+      type: UserActionTypes.USER_UPDATE_PROFILE_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.put<IUserInfo>(
+      `/api/users/profile`,
+      user,
+      config
+    );
+
+    dispatch({
+      type: UserActionTypes.USER_UPDATE_PROFILE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: UserActionTypes.USER_UPDATE_PROFILE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
