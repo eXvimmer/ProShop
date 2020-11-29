@@ -18,6 +18,9 @@ export enum UserActionTypes {
   USER_REGISTER_REQUEST = "USER_REGISTER_REQUEST",
   USER_REGISTER_SUCCESS = "USER_REGISTER_SUCCESS",
   USER_REGISTER_FAIL = "USER_REGISTER_FAIL",
+  USER_DETAILS_REQUEST = "USER_DETAILS_REQUEST",
+  USER_DETAILS_SUCCESS = "USER_DETAILS_SUCCESS",
+  USER_DETAILS_FAIL = "USER_DETAILS_FAIL",
 }
 
 export interface IUserLoginRequest {
@@ -50,6 +53,18 @@ export interface IUserRegisterFail {
   payload: string;
 }
 
+export interface IUserDetailsRequest {
+  type: UserActionTypes.USER_DETAILS_REQUEST;
+}
+export interface IUserDetailsSuccess {
+  type: UserActionTypes.USER_DETAILS_SUCCESS;
+  payload: IUserInfo;
+}
+export interface IUserDetailsFail {
+  type: UserActionTypes.USER_DETAILS_FAIL;
+  payload: string;
+}
+
 export type UserActions =
   | IUserLoginRequest
   | IUserLoginSuccess
@@ -57,7 +72,10 @@ export type UserActions =
   | IUserLogout
   | IUserRegisterRequest
   | IUserRegisterSuccess
-  | IUserRegisterFail;
+  | IUserRegisterFail
+  | IUserDetailsRequest
+  | IUserDetailsSuccess
+  | IUserDetailsFail;
 
 export interface IUserLoginState {
   loading: boolean;
@@ -68,5 +86,11 @@ export interface IUserLoginState {
 export interface IUserRegisterState {
   loading: boolean;
   userInfo: IUserInfo | null;
+  error: string;
+}
+
+export interface IUserDetailsState {
+  user: IUserInfo | null;
+  loading: boolean;
   error: string;
 }

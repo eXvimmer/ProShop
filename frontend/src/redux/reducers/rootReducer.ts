@@ -6,6 +6,7 @@ import {
   productDetailsReducer,
 } from "./productReducers";
 import {
+  userDetailsReducer,
   userLoginReducer,
   userRegisterReducer,
 } from "./userReducers";
@@ -16,6 +17,7 @@ const rootReducer = combineReducers<IApplicationState>({
   cart: cartReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
+  userDetails: userDetailsReducer,
 });
 
 export default rootReducer;

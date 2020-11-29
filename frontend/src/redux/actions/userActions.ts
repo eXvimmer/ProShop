@@ -107,3 +107,43 @@ export const register: ActionCreator<
     });
   }
 };
+
+export const getUserDetails: ActionCreator<
+  ThunkAction<Promise<void>, IApplicationState, string, UserActions>
+> = id => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const token = userInfo ? userInfo.token : "";
+
+    dispatch({
+      type: UserActionTypes.USER_DETAILS_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.get<IUserInfo>(
+      `/api/users/${id}`,
+      config
+    );
+
+    dispatch({
+      type: UserActionTypes.USER_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: UserActionTypes.USER_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

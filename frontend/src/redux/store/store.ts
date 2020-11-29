@@ -15,6 +15,7 @@ import {
 } from "../types/productTypes";
 import { ICartState } from "../types/cartTypes";
 import {
+  IUserDetailsState,
   IUserLoginState,
   IUserRegisterState,
 } from "../types/userTypes";
@@ -25,6 +26,7 @@ export interface IApplicationState {
   cart: ICartState;
   userLogin: IUserLoginState;
   userRegister: IUserRegisterState;
+  userDetails: IUserDetailsState;
 }
 
 const cartItems = localStorage.getItem("cartItems");

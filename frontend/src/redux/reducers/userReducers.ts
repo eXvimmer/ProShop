@@ -1,5 +1,7 @@
+// TODO: Do something about repeated codes
 import { Reducer } from "redux";
 import {
+  IUserDetailsState,
   IUserLoginState,
   IUserRegisterState,
   UserActions,
@@ -76,6 +78,42 @@ export const userRegisterReducer: Reducer<
       };
 
     case UserActionTypes.USER_REGISTER_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+const initialUserDetailsState: IUserDetailsState = {
+  user: null,
+  loading: false,
+  error: "",
+};
+
+export const userDetailsReducer: Reducer<
+  IUserDetailsState,
+  UserActions
+> = (state = initialUserDetailsState, action) => {
+  switch (action.type) {
+    case UserActionTypes.USER_DETAILS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case UserActionTypes.USER_DETAILS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        user: action.payload,
+      };
+
+    case UserActionTypes.USER_DETAILS_FAIL:
       return {
         ...state,
         loading: false,
