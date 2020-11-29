@@ -5,11 +5,13 @@ import {
   productListReducer,
   productDetailsReducer,
 } from "./productReducers";
+import { userLoginReducer } from "./userReducers";
 
 const rootReducer = combineReducers<IApplicationState>({
   productList: productListReducer,
   productDetails: productDetailsReducer,
   cart: cartReducer,
+  userLogin: userLoginReducer,
 });
 
 export default rootReducer;
