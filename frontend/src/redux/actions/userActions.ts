@@ -48,4 +48,11 @@ export const login: ActionCreator<
   }
 };
 
-// TODO: add an action creator for logout. Remove the user from localStorage
+export const logout: ActionCreator<
+  ThunkAction<void, IApplicationState, null, UserActions>
+> = () => dispatch => {
+  localStorage.removeItem("userInfo");
+  dispatch({
+    type: UserActionTypes.USER_LOGOUT,
+  });
+};

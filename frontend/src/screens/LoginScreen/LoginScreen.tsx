@@ -27,9 +27,7 @@ const LoginScreen: FC<RouteComponentProps> = ({
     state => state.userLogin
   );
 
-  const { error, loading, userInfo } = userLogin
-    ? userLogin
-    : { loading: false, error: "", userInfo: null };
+  const { error, loading, userInfo } = userLogin;
 
   const redirect = search ? search.split("=")[1] : "/";
 
