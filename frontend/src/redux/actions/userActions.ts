@@ -47,3 +47,5 @@ export const login: ActionCreator<
     });
   }
 };
+
+// TODO: add an action creator for logout. Remove the user from localStorage

@@ -20,15 +20,16 @@ export interface IApplicationState {
   productList: IProductListState;
   productDetails: IProductDetailsState;
   cart: ICartState;
-
-  userLogin: IUserState | {};
+  userLogin: IUserState;
 }
 
 const cartItems = localStorage.getItem("cartItems");
 const cartItemsFromStorage = cartItems ? JSON.parse(cartItems) : [];
 
 const userInfo = localStorage.getItem("userInfo");
-const userInfoFromStorage = userInfo ? JSON.parse(userInfo) : null;
+const userInfoFromStorage = userInfo
+  ? { loading: false, error: "", userInfo: JSON.parse(userInfo) }
+  : { loading: false, error: "", userInfo: null };
 
 const initialState = {
   cart: {

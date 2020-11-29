@@ -11,10 +11,10 @@ const initialUserState: IUserState = {
   error: "",
 };
 
-export const userLoginReducer: Reducer<
-  IUserState | {},
-  UserActions
-> = (state = initialUserState, action) => {
+export const userLoginReducer: Reducer<IUserState, UserActions> = (
+  state = initialUserState,
+  action
+) => {
   switch (action.type) {
     case UserActionTypes.USER_LOGIN_REQUEST:
       return {
@@ -26,6 +26,7 @@ export const userLoginReducer: Reducer<
       return {
         ...state,
         loading: false,
+        error: "",
         userInfo: action.payload,
       };
 
@@ -37,7 +38,11 @@ export const userLoginReducer: Reducer<
       };
 
     case UserActionTypes.USER_LOGOUT:
-      return {};
+      return {
+        loading: false,
+        error: "",
+        userInfo: null,
+      };
 
     default:
       return state;
