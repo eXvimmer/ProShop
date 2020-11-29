@@ -4,21 +4,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import FormContainer from "../../components/FormContainer/FormContainer";
 import {
-  IUserLoginState,
+  IUserRegisterState,
   UserActions,
 } from "../../redux/types/userTypes";
 import { IApplicationState } from "../../redux/store/store";
-import { login } from "../../redux/actions/userActions";
+import { register } from "../../redux/actions/userActions";
 import Message from "../../components/Message/Message";
 import Loader from "../../components/Loader/Loader";
 import { ThunkDispatch } from "redux-thunk";
 
-const LoginScreen: FC<RouteComponentProps> = ({
+const RegisterScreen: FC<RouteComponentProps> = ({
   location: { search },
   history,
 }) => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
 
   const dispatch: ThunkDispatch<
     IApplicationState,
@@ -26,11 +29,12 @@ const LoginScreen: FC<RouteComponentProps> = ({
     UserActions
   > = useDispatch();
 
-  const userLogin = useSelector<IApplicationState, IUserLoginState>(
-    state => state.userLogin
-  );
+  const userRegister = useSelector<
+    IApplicationState,
+    IUserRegisterState
+  >(state => state.userRegister);
 
-  const { error, loading, userInfo } = userLogin;
+  const { error, loading, userInfo } = userRegister;
 
   const redirect = search ? search.split("=")[1] : "/";
 
@@ -40,17 +44,34 @@ const LoginScreen: FC<RouteComponentProps> = ({
     }
   }, [history, redirect, userInfo]);
 
-  const onSignInSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSignUpSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    dispatch(login(email, password));
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match");
+      setPassword("");
+      setConfirmPassword("");
+    } else {
+      dispatch(register(name, email, password));
+      setMessage("");
+    }
   };
   return (
     <FormContainer>
-      <h1>Sign In</h1>
+      <h1>Sign Up</h1>
+      {message && <Message variant="danger">{message}</Message>}
       {error && <Message variant="danger">{error}</Message>}
       {loading && <Loader />}
-      <Form onSubmit={onSignInSubmit}>
+      <Form onSubmit={onSignUpSubmit}>
+        <Form.Group controlId="name">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter Name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
         <Form.Group controlId="email">
           <Form.Label>Email Address</Form.Label>
           <Form.Control
@@ -69,22 +90,27 @@ const LoginScreen: FC<RouteComponentProps> = ({
             onChange={e => setPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
+        <Form.Group controlId="confirmPassword">
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
         <Button type="submit" variant="primary">
-          Sign In
+          Register
         </Button>
       </Form>
 
       <Row className="py-3">
         <Col>
-          New Customer?{" "}
+          Have an Account?{" "}
           <Link
-            to={
-              redirect
-                ? `/register?redirect=${redirect}`
-                : `/register`
-            }
+            to={redirect ? `/login?redirect=${redirect}` : `/login`}
           >
-            Register
+            Login
           </Link>
         </Col>
       </Row>
@@ -92,4 +118,4 @@ const LoginScreen: FC<RouteComponentProps> = ({
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;

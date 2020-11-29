@@ -1,3 +1,7 @@
+/*
+ * TODO
+ * Change the duplicate types. like login and register types
+ */
 export interface IUserInfo {
   _id: string;
   name: string;
@@ -11,6 +15,9 @@ export enum UserActionTypes {
   USER_LOGIN_SUCCESS = "USER_LOGIN_SUCCESS",
   USER_LOGIN_FAIL = "USER_LOGIN_FAIL",
   USER_LOGOUT = "USER_LOGOUT",
+  USER_REGISTER_REQUEST = "USER_REGISTER_REQUEST",
+  USER_REGISTER_SUCCESS = "USER_REGISTER_SUCCESS",
+  USER_REGISTER_FAIL = "USER_REGISTER_FAIL",
 }
 
 export interface IUserLoginRequest {
@@ -31,13 +38,34 @@ export interface IUserLogout {
   type: UserActionTypes.USER_LOGOUT;
 }
 
+export interface IUserRegisterRequest {
+  type: UserActionTypes.USER_REGISTER_REQUEST;
+}
+export interface IUserRegisterSuccess {
+  type: UserActionTypes.USER_REGISTER_SUCCESS;
+  payload: IUserInfo;
+}
+export interface IUserRegisterFail {
+  type: UserActionTypes.USER_REGISTER_FAIL;
+  payload: string;
+}
+
 export type UserActions =
   | IUserLoginRequest
   | IUserLoginSuccess
   | IUserLoginFail
-  | IUserLogout;
+  | IUserLogout
+  | IUserRegisterRequest
+  | IUserRegisterSuccess
+  | IUserRegisterFail;
 
-export interface IUserState {
+export interface IUserLoginState {
+  loading: boolean;
+  userInfo: IUserInfo | null;
+  error: string;
+}
+
+export interface IUserRegisterState {
   loading: boolean;
   userInfo: IUserInfo | null;
   error: string;

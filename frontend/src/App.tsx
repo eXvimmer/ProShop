@@ -7,6 +7,7 @@ import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import ProductScreen from "./screens/ProductScreen/ProductScreen";
 import CartScreen from "./screens/CartScreen/CartScreen";
 import LoginScreen from "./screens/LoginScreen/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen/RegisterScreen";
 
 const App: FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: FC = () => {
           <Switch>
             <Route path="/product/:id" component={ProductScreen} />
             <Route path="/login" component={LoginScreen} />
+            <Route path="/register" component={RegisterScreen} />
             {/* NOTE
              * /cart/:id? means that id is optional
              */}

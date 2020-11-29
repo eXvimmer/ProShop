@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { IApplicationState } from "../../redux/store/store";
-import { IUserState } from "../../redux/types/userTypes";
+import { IUserLoginState } from "../../redux/types/userTypes";
 import { logout } from "../../redux/actions/userActions";
 
 const Header: FC = () => {
-  const userLogin = useSelector<IApplicationState, IUserState>(
+  const userLogin = useSelector<IApplicationState, IUserLoginState>(
     state => state.userLogin
   );
 

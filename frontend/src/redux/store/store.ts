@@ -14,13 +14,17 @@ import {
   IProductListState,
 } from "../types/productTypes";
 import { ICartState } from "../types/cartTypes";
-import { IUserState } from "../types/userTypes";
+import {
+  IUserLoginState,
+  IUserRegisterState,
+} from "../types/userTypes";
 
 export interface IApplicationState {
   productList: IProductListState;
   productDetails: IProductDetailsState;
   cart: ICartState;
-  userLogin: IUserState;
+  userLogin: IUserLoginState;
+  userRegister: IUserRegisterState;
 }
 
 const cartItems = localStorage.getItem("cartItems");
