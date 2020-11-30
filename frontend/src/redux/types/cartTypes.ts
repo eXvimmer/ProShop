@@ -51,4 +51,8 @@ export interface ICartState {
   cartItems: ICartItem[];
   shippingAddress: ICartAddress;
   paymentMethod: string;
+  itemsPrice: number;
+  shippingPrice: number;
+  taxPrice: number;
+  totalPrice: number;
 }

@@ -14,6 +14,10 @@ const initialCartState: ICartState = {
     postalCode: "",
   },
   paymentMethod: "",
+  itemsPrice: 0,
+  shippingPrice: 0,
+  taxPrice: 0,
+  totalPrice: 0,
 };
 
 export const cartReducer: Reducer<ICartState, CartActions> = (
