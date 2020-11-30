@@ -7,6 +7,12 @@ import {
 
 const initialCartState: ICartState = {
   cartItems: [],
+  shippingAddress: {
+    address: "",
+    city: "",
+    country: "",
+    postalCode: "",
+  },
 };
 
 export const cartReducer: Reducer<ICartState, CartActions> = (
@@ -40,6 +46,12 @@ export const cartReducer: Reducer<ICartState, CartActions> = (
         cartItems: state.cartItems.filter(
           item => item.product !== action.payload
         ),
+      };
+
+    case CartActionTypes.CART_SAVE_SHIPPING_ADDRESS:
+      return {
+        ...state,
+        shippingAddress: action.payload,
       };
 
     default:

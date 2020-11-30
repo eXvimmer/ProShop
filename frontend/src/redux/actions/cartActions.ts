@@ -2,7 +2,11 @@ import axios from "axios";
 import { ActionCreator, Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { IApplicationState } from "../store/store";
-import { CartActions, CartActionTypes } from "../types/cartTypes";
+import {
+  CartActions,
+  CartActionTypes,
+  ICartAddress,
+} from "../types/cartTypes";
 import { IProduct } from "../types/productTypes";
 
 export const addToCart: ActionCreator<
@@ -50,4 +54,15 @@ export const removeFromCart: ActionCreator<
     "cartItems",
     JSON.stringify(getState().cart.cartItems)
   );
+};
+
+export const saveShippingAddress: ActionCreator<
+  ThunkAction<void, IApplicationState, string, CartActions>
+> = (data: ICartAddress) => dispatch => {
+  dispatch({
+    type: CartActionTypes.CART_SAVE_SHIPPING_ADDRESS,
+    payload: data,
+  });
+
+  localStorage.setItem("shippingAddress", JSON.stringify(data));
 };

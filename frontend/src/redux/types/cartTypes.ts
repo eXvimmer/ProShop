@@ -7,9 +7,17 @@ export interface ICartItem {
   qty: number;
 }
 
+export interface ICartAddress {
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
 export enum CartActionTypes {
   CART_ADD_ITEM = "CART_ADD_ITEM",
   CART_REMOVE_ITEM = "CART_REMOVE_ITEM",
+  CART_SAVE_SHIPPING_ADDRESS = "CART_SAVE_SHIPPING_ADDRESS",
 }
 
 export interface ICartAddItem {
@@ -22,8 +30,17 @@ export interface ICartRemoveItem {
   payload: string;
 }
 
-export type CartActions = ICartAddItem | ICartRemoveItem;
+export interface ICartSaveShippingAddress {
+  type: CartActionTypes.CART_SAVE_SHIPPING_ADDRESS;
+  payload: ICartAddress;
+}
+
+export type CartActions =
+  | ICartAddItem
+  | ICartRemoveItem
+  | ICartSaveShippingAddress;
 
 export interface ICartState {
   cartItems: ICartItem[];
+  shippingAddress: ICartAddress;
 }

@@ -13,7 +13,7 @@ import {
   IProductDetailsState,
   IProductListState,
 } from "../types/productTypes";
-import { ICartState } from "../types/cartTypes";
+import { ICartAddress, ICartState } from "../types/cartTypes";
 import {
   IUserDetailsState,
   IUserLoginState,
@@ -34,6 +34,11 @@ export interface IApplicationState {
 const cartItems = localStorage.getItem("cartItems");
 const cartItemsFromStorage = cartItems ? JSON.parse(cartItems) : [];
 
+const shippingAddress = localStorage.getItem("shippingAddress");
+const shippingAddressFromStorage: ICartAddress = shippingAddress
+  ? JSON.parse(shippingAddress)
+  : { address: "", country: "", city: "", postalCode: "" };
+
 const userInfo = localStorage.getItem("userInfo");
 const userInfoFromStorage = userInfo
   ? { loading: false, error: "", userInfo: JSON.parse(userInfo) }
@@ -42,6 +47,7 @@ const userInfoFromStorage = userInfo
 const initialState = {
   cart: {
     cartItems: cartItemsFromStorage,
+    shippingAddress: shippingAddressFromStorage,
   },
   userLogin: userInfoFromStorage,
 };
