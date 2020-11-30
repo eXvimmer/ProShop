@@ -66,3 +66,14 @@ export const saveShippingAddress: ActionCreator<
 
   localStorage.setItem("shippingAddress", JSON.stringify(data));
 };
+
+export const savePaymentMethod: ActionCreator<
+  ThunkAction<void, IApplicationState, string, CartActions>
+> = (data: string) => dispatch => {
+  dispatch({
+    type: CartActionTypes.CART_SAVE_PAYMENT_METHOD,
+    payload: data,
+  });
+
+  localStorage.setItem("paymentMethod", JSON.stringify(data));
+};

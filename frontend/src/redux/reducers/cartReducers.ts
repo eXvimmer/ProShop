@@ -13,6 +13,7 @@ const initialCartState: ICartState = {
     country: "",
     postalCode: "",
   },
+  paymentMethod: "",
 };
 
 export const cartReducer: Reducer<ICartState, CartActions> = (
@@ -52,6 +53,12 @@ export const cartReducer: Reducer<ICartState, CartActions> = (
       return {
         ...state,
         shippingAddress: action.payload,
+      };
+
+    case CartActionTypes.CART_SAVE_PAYMENT_METHOD:
+      return {
+        ...state,
+        paymentMethod: action.payload,
       };
 
     default:
