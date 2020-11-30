@@ -1,4 +1,4 @@
-import React, { FC, Fragment } from "react";
+import React, { FC, Fragment, useEffect } from "react";
 import {
   Button,
   Card,
@@ -7,14 +7,26 @@ import {
   ListGroup,
   Row,
 } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, RouteComponentProps } from "react-router-dom";
+import { ThunkDispatch } from "redux-thunk";
 import CheckoutSteps from "../../components/CheckoutSteps/CheckoutSteps";
 import Message from "../../components/Message/Message";
 import { IApplicationState } from "../../redux/store/store";
 import { ICartState } from "../../redux/types/cartTypes";
+import {
+  IOrder,
+  IOrderState,
+  OrderActions,
+} from "../../redux/types/orderTypes";
+import { createOrder } from "./../../redux/actions/orderActions";
 
-const PlaceOrderScreen: FC = () => {
+const PlaceOrderScreen: FC<RouteComponentProps> = ({ history }) => {
+  const dispatch: ThunkDispatch<
+    IApplicationState,
+    IOrder,
+    OrderActions
+  > = useDispatch();
   const cart = useSelector<IApplicationState, ICartState>(
     state => state.cart
   );
@@ -25,7 +37,7 @@ const PlaceOrderScreen: FC = () => {
     0
   );
 
-  // TODO: This is fictional price, do it right
+  // NOTE: This is fictional price, do it right
   cart.shippingPrice = cart.itemsPrice > 100 ? 0 : 100;
 
   cart.taxPrice = Number(0.15 * cart.itemsPrice);
@@ -34,7 +46,33 @@ const PlaceOrderScreen: FC = () => {
     cart.itemsPrice + cart.shippingPrice + cart.taxPrice
   );
 
-  const placeOrderHandler = () => {};
+  const orderCreate = useSelector<IApplicationState, IOrderState>(
+    state => state.orderCreate
+  );
+
+  const { order, success, error } = orderCreate;
+
+  // REVIEW: if you chage the payload of the success type in
+  // order action then you should change this line too.
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order._id}`);
+    }
+  }, [history, order._id, success]);
+
+  const placeOrderHandler = () => {
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      })
+    );
+  };
 
   return (
     <Fragment>
@@ -147,6 +185,9 @@ const PlaceOrderScreen: FC = () => {
                     })}
                   </Col>
                 </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                {error && <Message variant="danger">{error}</Message>}
               </ListGroup.Item>
               <ListGroup.Item>
                 <Button

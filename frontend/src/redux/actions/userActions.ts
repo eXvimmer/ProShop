@@ -148,9 +148,10 @@ export const getUserDetails: ActionCreator<
   }
 };
 
+// TODO: change any
 export const updateUserProfile: ActionCreator<
   ThunkAction<Promise<void>, IApplicationState, any, UserActions>
-> = (user: any) => async (dispatch, getState) => {
+> = (user: IUserInfo) => async (dispatch, getState) => {
   try {
     const {
       userLogin: { userInfo },

@@ -13,6 +13,8 @@ import ShippingScreen from "./screens/ShippingScreen/ShippingScreen";
 import PaymentScreen from "./screens/PaymentScreen/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen/PlaceOrderScreen";
 
+/* TODO: change all unassigned dispatch types */
+
 const App: FC = () => {
   return (
     <BrowserRouter>

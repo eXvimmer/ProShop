@@ -20,6 +20,7 @@ import {
   IUserRegisterState,
   IUserUpdateProfileState,
 } from "../types/userTypes";
+import { IOrderState } from "../types/orderTypes";
 
 export interface IApplicationState {
   productList: IProductListState;
@@ -29,6 +30,7 @@ export interface IApplicationState {
   userRegister: IUserRegisterState;
   userDetails: IUserDetailsState;
   userUpdateProfile: IUserUpdateProfileState;
+  orderCreate: IOrderState;
 }
 
 const cartItems = localStorage.getItem("cartItems");
