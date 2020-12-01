@@ -1,5 +1,12 @@
 import { ICartAddress, ICartItem } from "./cartTypes";
 
+export interface IPaymentResult {
+  id: string;
+  status: string;
+  update_time: Date;
+  email_address: string;
+}
+
 export interface IOrder {
   _id?: string;
   orderItems: ICartItem[];
@@ -7,12 +14,7 @@ export interface IOrder {
   paidAt?: Date;
   isDelivered?: boolean;
   deliveredAt?: Date;
-  paymentResult?: {
-    id: string;
-    status: string;
-    update_time: Date;
-    email_address: string;
-  };
+  paymentResult?: IPaymentResult;
   shippingAddress: ICartAddress;
   paymentMethod: string;
   itemsPrice: number;
@@ -32,6 +34,10 @@ export enum OrderActionTypes {
   ORDER_DETAILS_REQUEST = "ORDER_DETAILS_REQUEST",
   ORDER_DETAILS_SUCCESS = "ORDER_DETAILS_SUCCESS",
   ORDER_DETAILS_FAIL = "ORDER_DETAILS_FAIL",
+  ORDER_PAY_REQUEST = "ORDER_PAY_REQUEST",
+  ORDER_PAY_SUCCESS = "ORDER_PAY_SUCCESS",
+  ORDER_PAY_FAIL = "ORDER_PAY_FAIL",
+  ORDER_PAY_RESET = "ORDER_PAY_RESET",
 }
 
 export interface IOrderCreateRequest {
@@ -62,13 +68,35 @@ export interface IOrderDetailsFail {
   payload: string;
 }
 
+export interface IOrderPayRequest {
+  type: OrderActionTypes.ORDER_PAY_REQUEST;
+}
+
+export interface IOrderPaySuccess {
+  type: OrderActionTypes.ORDER_PAY_SUCCESS;
+  payload: IOrder;
+}
+
+export interface IOrderPayFail {
+  type: OrderActionTypes.ORDER_PAY_FAIL;
+  payload: string;
+}
+
+export interface IOrderPayReset {
+  type: OrderActionTypes.ORDER_PAY_RESET;
+}
+
 export type OrderActions =
   | IOrderCreateRequest
   | IOrderCreateSuccess
   | IOrderCreateFail
   | IOrderDetailsRequest
   | IOrderDetailsSuccess
-  | IOrderDetailsFail;
+  | IOrderDetailsFail
+  | IOrderPayRequest
+  | IOrderPaySuccess
+  | IOrderPayFail
+  | IOrderPayReset;
 
 export interface IOrderCreateState {
   loading: boolean;
@@ -83,4 +111,10 @@ export interface IOrderDetailsState {
   error: string;
   loading: boolean;
   order: IOrder;
+}
+
+export interface IOrderPayState {
+  loading: boolean;
+  success: boolean;
+  error: string;
 }

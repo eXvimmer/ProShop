@@ -2,6 +2,7 @@ import { Reducer } from "redux";
 import {
   IOrderCreateState,
   IOrderDetailsState,
+  IOrderPayState,
   OrderActions,
   OrderActionTypes,
 } from "../types/orderTypes";
@@ -107,6 +108,49 @@ export const orderDetailsReducer: Reducer<
         ...state,
         loading: false,
         error: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+const initialPayState: IOrderPayState = {
+  loading: false,
+  error: "",
+  success: false,
+};
+
+export const orderPayReducer: Reducer<
+  IOrderPayState,
+  OrderActions
+> = (state = initialPayState, action) => {
+  switch (action.type) {
+    case OrderActionTypes.ORDER_PAY_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case OrderActionTypes.ORDER_PAY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
+
+    case OrderActionTypes.ORDER_PAY_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case OrderActionTypes.ORDER_PAY_RESET:
+      return {
+        loading: false,
+        error: "",
+        success: false,
       };
 
     default:

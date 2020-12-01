@@ -4,6 +4,7 @@ import { ThunkAction } from "redux-thunk";
 import { IApplicationState } from "../store/store";
 import {
   IOrder,
+  IPaymentResult,
   OrderActions,
   OrderActionTypes,
 } from "../types/orderTypes";
@@ -77,6 +78,55 @@ export const getOrderDetails: ActionCreator<
   } catch (error) {
     dispatch({
       type: OrderActionTypes.ORDER_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const payOrder: ActionCreator<
+  ThunkAction<
+    Promise<void>,
+    IApplicationState,
+    string & IPaymentResult,
+    OrderActions
+  >
+> = (orderId: string, paymentResult: IPaymentResult) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const token = userInfo ? userInfo.token : "";
+
+    dispatch({
+      type: OrderActionTypes.ORDER_PAY_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.put<IOrder>(
+      `/api/orders/${orderId}/pay`,
+      paymentResult,
+      config
+    );
+
+    dispatch({
+      type: OrderActionTypes.ORDER_PAY_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: OrderActionTypes.ORDER_PAY_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

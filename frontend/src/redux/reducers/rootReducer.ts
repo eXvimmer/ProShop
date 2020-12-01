@@ -4,6 +4,7 @@ import { cartReducer } from "./cartReducers";
 import {
   orderCreateReducer,
   orderDetailsReducer,
+  orderPayReducer,
 } from "./orderReducers";
 import {
   productListReducer,
@@ -26,6 +27,7 @@ const rootReducer = combineReducers<IApplicationState>({
   userUpdateProfile: userUpdateProfileReducer,
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
+  orderPay: orderPayReducer,
 });
 
 export default rootReducer;
