@@ -66,7 +66,22 @@ const initialOrderDetailsState: IOrderDetailsState = {
     postalCode: "",
   },
   error: "",
-  loading: false,
+  loading: true,
+  order: {
+    _id: "",
+    orderItems: [],
+    shippingAddress: {
+      address: "",
+      city: "",
+      country: "",
+      postalCode: "",
+    },
+    paymentMethod: "",
+    itemsPrice: 0,
+    shippingPrice: 0,
+    taxPrice: 0,
+    totalPrice: 0,
+  },
 };
 
 export const orderDetailsReducer: Reducer<

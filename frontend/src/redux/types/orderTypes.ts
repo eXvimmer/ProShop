@@ -3,12 +3,20 @@ import { ICartAddress, ICartItem } from "./cartTypes";
 export interface IOrder {
   _id?: string;
   orderItems: ICartItem[];
+  isPaid?: boolean;
+  paidAt?: Date;
+  isDelivered?: boolean;
+  deliveredAt?: Date;
   shippingAddress: ICartAddress;
   paymentMethod: string;
   itemsPrice: number;
   shippingPrice: number;
   taxPrice: number;
   totalPrice: number;
+  user?: {
+    name: string;
+    email: string;
+  };
 }
 
 export enum OrderActionTypes {
@@ -68,4 +76,5 @@ export interface IOrderDetailsState {
   shippingAddress: ICartAddress;
   error: string;
   loading: boolean;
+  order: IOrder;
 }
