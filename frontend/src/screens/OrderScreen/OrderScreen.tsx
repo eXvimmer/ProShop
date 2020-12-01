@@ -57,6 +57,8 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
           </p>{" "}
         </div>
       );
+    } else {
+      return null;
     }
   };
 

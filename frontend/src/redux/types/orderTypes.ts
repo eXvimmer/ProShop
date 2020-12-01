@@ -7,6 +7,12 @@ export interface IOrder {
   paidAt?: Date;
   isDelivered?: boolean;
   deliveredAt?: Date;
+  paymentResult?: {
+    id: string;
+    status: string;
+    update_time: Date;
+    email_address: string;
+  };
   shippingAddress: ICartAddress;
   paymentMethod: string;
   itemsPrice: number;
