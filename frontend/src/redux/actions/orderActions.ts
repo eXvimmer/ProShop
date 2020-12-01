@@ -8,9 +8,8 @@ import {
   OrderActionTypes,
 } from "../types/orderTypes";
 
-/* TODO: change any with IOrder or something */
 export const createOrder: ActionCreator<
-  ThunkAction<Promise<void>, IApplicationState, any, OrderActions>
+  ThunkAction<Promise<void>, IApplicationState, IOrder, OrderActions>
 > = (order: IOrder) => async (dispatch, getState) => {
   try {
     const {
@@ -39,6 +38,45 @@ export const createOrder: ActionCreator<
   } catch (error) {
     dispatch({
       type: OrderActionTypes.ORDER_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getOrderDetails: ActionCreator<
+  ThunkAction<Promise<void>, IApplicationState, string, OrderActions>
+> = (id: string) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const token = userInfo ? userInfo.token : "";
+
+    dispatch({
+      type: OrderActionTypes.ORDER_DETAILS_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.get<IOrder>(
+      `/api/orders/${id}`,
+      config
+    );
+
+    dispatch({
+      type: OrderActionTypes.ORDER_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: OrderActionTypes.ORDER_DETAILS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

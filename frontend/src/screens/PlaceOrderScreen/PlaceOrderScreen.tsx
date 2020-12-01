@@ -16,7 +16,7 @@ import { IApplicationState } from "../../redux/store/store";
 import { ICartState } from "../../redux/types/cartTypes";
 import {
   IOrder,
-  IOrderState,
+  IOrderCreateState,
   OrderActions,
 } from "../../redux/types/orderTypes";
 import { createOrder } from "./../../redux/actions/orderActions";
@@ -46,9 +46,10 @@ const PlaceOrderScreen: FC<RouteComponentProps> = ({ history }) => {
     cart.itemsPrice + cart.shippingPrice + cart.taxPrice
   );
 
-  const orderCreate = useSelector<IApplicationState, IOrderState>(
-    state => state.orderCreate
-  );
+  const orderCreate = useSelector<
+    IApplicationState,
+    IOrderCreateState
+  >(state => state.orderCreate);
 
   const { order, success, error } = orderCreate;
 

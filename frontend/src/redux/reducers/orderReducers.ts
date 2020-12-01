@@ -1,11 +1,12 @@
 import { Reducer } from "redux";
 import {
-  IOrderState,
+  IOrderCreateState,
+  IOrderDetailsState,
   OrderActions,
   OrderActionTypes,
 } from "../types/orderTypes";
 
-const initialOrderCreateState: IOrderState = {
+const initialOrderCreateState: IOrderCreateState = {
   loading: false,
   success: false,
   order: {
@@ -26,7 +27,7 @@ const initialOrderCreateState: IOrderState = {
 };
 
 export const orderCreateReducer: Reducer<
-  IOrderState,
+  IOrderCreateState,
   OrderActions
 > = (state = initialOrderCreateState, action) => {
   switch (action.type) {
@@ -45,6 +46,48 @@ export const orderCreateReducer: Reducer<
       };
 
     case OrderActionTypes.ORDER_CREATE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+const initialOrderDetailsState: IOrderDetailsState = {
+  orderItems: [],
+  shippingAddress: {
+    address: "",
+    city: "",
+    country: "",
+    postalCode: "",
+  },
+  error: "",
+  loading: false,
+};
+
+export const orderDetailsReducer: Reducer<
+  IOrderDetailsState,
+  OrderActions
+> = (state = initialOrderDetailsState, action) => {
+  switch (action.type) {
+    case OrderActionTypes.ORDER_DETAILS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case OrderActionTypes.ORDER_DETAILS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        order: action.payload,
+      };
+
+    case OrderActionTypes.ORDER_DETAILS_FAIL:
       return {
         ...state,
         loading: false,

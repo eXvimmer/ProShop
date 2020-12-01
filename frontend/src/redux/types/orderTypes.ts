@@ -15,6 +15,9 @@ export enum OrderActionTypes {
   ORDER_CREATE_REQUEST = "ORDER_CREATE_REQUEST",
   ORDER_CREATE_SUCCESS = "ORDER_CREATE_SUCCESS",
   ORDER_CREATE_FAIL = "ORDER_CREATE_FAIL",
+  ORDER_DETAILS_REQUEST = "ORDER_DETAILS_REQUEST",
+  ORDER_DETAILS_SUCCESS = "ORDER_DETAILS_SUCCESS",
+  ORDER_DETAILS_FAIL = "ORDER_DETAILS_FAIL",
 }
 
 export interface IOrderCreateRequest {
@@ -31,14 +34,38 @@ export interface IOrderCreateFail {
   payload: string;
 }
 
+export interface IOrderDetailsRequest {
+  type: OrderActionTypes.ORDER_DETAILS_REQUEST;
+}
+
+export interface IOrderDetailsSuccess {
+  type: OrderActionTypes.ORDER_DETAILS_SUCCESS;
+  payload: IOrder;
+}
+
+export interface IOrderDetailsFail {
+  type: OrderActionTypes.ORDER_DETAILS_FAIL;
+  payload: string;
+}
+
 export type OrderActions =
   | IOrderCreateRequest
   | IOrderCreateSuccess
-  | IOrderCreateFail;
+  | IOrderCreateFail
+  | IOrderDetailsRequest
+  | IOrderDetailsSuccess
+  | IOrderDetailsFail;
 
-export interface IOrderState {
+export interface IOrderCreateState {
   loading: boolean;
   success: boolean;
   order: IOrder;
   error: string;
+}
+
+export interface IOrderDetailsState {
+  orderItems: ICartItem[];
+  shippingAddress: ICartAddress;
+  error: string;
+  loading: boolean;
 }

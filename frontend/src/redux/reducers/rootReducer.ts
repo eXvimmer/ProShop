@@ -1,7 +1,10 @@
 import { combineReducers } from "redux";
 import { IApplicationState } from "../store/store";
 import { cartReducer } from "./cartReducers";
-import { orderCreateReducer } from "./orderReducers";
+import {
+  orderCreateReducer,
+  orderDetailsReducer,
+} from "./orderReducers";
 import {
   productListReducer,
   productDetailsReducer,
@@ -22,6 +25,7 @@ const rootReducer = combineReducers<IApplicationState>({
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
   orderCreate: orderCreateReducer,
+  orderDetails: orderDetailsReducer,
 });
 
 export default rootReducer;
