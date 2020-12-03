@@ -2,9 +2,11 @@ import express from "express";
 import {
   authUser,
   deleteUser,
+  getUserById,
   getUserProfile,
   getUsers,
   registerUser,
+  updateUser,
   updateUserProfile,
 } from "../controllers/userControllers.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
@@ -12,7 +14,11 @@ import { protect, admin } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.route("/").get(protect, admin, getUsers).post(registerUser);
-router.route("/:id").delete(protect, admin, deleteUser);
+router
+  .route("/:id")
+  .get(protect, admin, getUserById)
+  .put(protect, admin, updateUser)
+  .delete(protect, admin, deleteUser);
 router.route("/login").post(authUser);
 router
   .route("/profile")
