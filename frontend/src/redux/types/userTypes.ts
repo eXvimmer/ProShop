@@ -29,6 +29,7 @@ export enum UserActionTypes {
   USER_LIST_REQUEST = "USER_LIST_REQUEST",
   USER_LIST_SUCCESS = "USER_LIST_SUCCESS",
   USER_LIST_FAIL = "USER_LIST_FAIL",
+  USER_LIST_RESET = "USER_LIST_RESET",
 }
 
 export interface IUserLoginRequest {
@@ -105,6 +106,10 @@ export interface IUserListFail {
   payload: string;
 }
 
+export interface IUserListReset {
+  type: UserActionTypes.USER_LIST_RESET;
+}
+
 export type UserActions =
   | IUserLoginRequest
   | IUserLoginSuccess
@@ -123,7 +128,8 @@ export type UserActions =
   | IUserUpdateProfileReset
   | IUserListRequest
   | IUserListSuccess
-  | IUserListFail;
+  | IUserListFail
+  | IUserListReset;
 
 export interface IUserLoginState {
   loading: boolean;

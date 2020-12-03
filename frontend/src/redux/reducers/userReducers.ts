@@ -208,6 +208,13 @@ export const userListReducer: Reducer<IUserListState, UserActions> = (
         error: action.payload,
       };
 
+    case UserActionTypes.USER_LIST_RESET:
+      return {
+        loading: false,
+        error: "",
+        users: [],
+      };
+
     default:
       return state;
   }

@@ -2,6 +2,7 @@ import React, { FC, Fragment, useEffect } from "react";
 import { Button, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
+import { RouteComponentProps } from "react-router-dom";
 import { ThunkDispatch } from "redux-thunk";
 import Loader from "../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
@@ -9,10 +10,11 @@ import { listUsers } from "../../redux/actions/userActions";
 import { IApplicationState } from "../../redux/store/store";
 import {
   IUserListState,
+  IUserLoginState,
   UserActions,
 } from "../../redux/types/userTypes";
 
-const UserListScreen: FC = () => {
+const UserListScreen: FC<RouteComponentProps> = ({ history }) => {
   const dispatch: ThunkDispatch<
     IApplicationState,
     null,
@@ -24,9 +26,18 @@ const UserListScreen: FC = () => {
   );
   const { loading, error, users } = userList;
 
+  const userLogin = useSelector<IApplicationState, IUserLoginState>(
+    state => state.userLogin
+  );
+  const { userInfo } = userLogin;
+
   useEffect(() => {
-    dispatch(listUsers());
-  }, [dispatch]);
+    if (userInfo && userInfo.isAdmin) {
+      dispatch(listUsers());
+    } else {
+      history.push("/login");
+    }
+  }, [dispatch, userInfo, history]);
 
   const deleteHandler = (id: string): void => {};
 

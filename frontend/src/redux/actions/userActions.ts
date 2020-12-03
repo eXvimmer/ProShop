@@ -65,6 +65,9 @@ export const logout: ActionCreator<
     type: OrderActionTypes.ORDER_LIST_MY_RESET,
   });
   dispatch({
+    type: UserActionTypes.USER_LIST_RESET,
+  });
+  dispatch({
     type: UserActionTypes.USER_LOGOUT,
   });
 };
