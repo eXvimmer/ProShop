@@ -23,6 +23,7 @@ import {
 import {
   IOrderCreateState,
   IOrderDetailsState,
+  IOrderListMyState,
   IOrderPayState,
 } from "../types/orderTypes";
 
@@ -37,6 +38,7 @@ export interface IApplicationState {
   orderCreate: IOrderCreateState;
   orderDetails: IOrderDetailsState;
   orderPay: IOrderPayState;
+  orderListMy: IOrderListMyState;
 }
 
 const cartItems = localStorage.getItem("cartItems");

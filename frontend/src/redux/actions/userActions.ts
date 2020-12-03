@@ -7,6 +7,7 @@ import axios from "axios";
 import { ActionCreator } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { IApplicationState } from "../store/store";
+import { OrderActions, OrderActionTypes } from "../types/orderTypes";
 
 export const login: ActionCreator<
   ThunkAction<Promise<void>, IApplicationState, string, UserActions>
@@ -49,10 +50,20 @@ export const login: ActionCreator<
 };
 
 export const logout: ActionCreator<
-  ThunkAction<void, IApplicationState, null, UserActions>
+  ThunkAction<
+    void,
+    IApplicationState,
+    null,
+    UserActions | OrderActions
+  >
 > = () => dispatch => {
   localStorage.removeItem("userInfo");
-  // REVIEW : should I remove cartItems too?
+  dispatch({
+    type: UserActionTypes.USER_DETAILS_RESET,
+  });
+  dispatch({
+    type: OrderActionTypes.ORDER_LIST_MY_RESET,
+  });
   dispatch({
     type: UserActionTypes.USER_LOGOUT,
   });
@@ -148,7 +159,6 @@ export const getUserDetails: ActionCreator<
   }
 };
 
-// TODO: change any
 export const updateUserProfile: ActionCreator<
   ThunkAction<Promise<void>, IApplicationState, any, UserActions>
 > = (user: IUserInfo) => async (dispatch, getState) => {

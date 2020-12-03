@@ -2,6 +2,7 @@ import { Reducer } from "redux";
 import {
   IOrderCreateState,
   IOrderDetailsState,
+  IOrderListMyState,
   IOrderPayState,
   OrderActions,
   OrderActionTypes,
@@ -68,21 +69,7 @@ const initialOrderDetailsState: IOrderDetailsState = {
   },
   error: "",
   loading: true,
-  order: {
-    _id: "",
-    orderItems: [],
-    shippingAddress: {
-      address: "",
-      city: "",
-      country: "",
-      postalCode: "",
-    },
-    paymentMethod: "",
-    itemsPrice: 0,
-    shippingPrice: 0,
-    taxPrice: 0,
-    totalPrice: 0,
-  },
+  order: null,
 };
 
 export const orderDetailsReducer: Reducer<
@@ -147,10 +134,50 @@ export const orderPayReducer: Reducer<
       };
 
     case OrderActionTypes.ORDER_PAY_RESET:
+      return {};
+
+    default:
+      return state;
+  }
+};
+
+const intialOrderMyList: IOrderListMyState = {
+  orders: [],
+  loading: false,
+  error: "",
+};
+
+export const orderListMyReducer: Reducer<
+  IOrderListMyState,
+  OrderActions
+> = (state = intialOrderMyList, action) => {
+  switch (action.type) {
+    case OrderActionTypes.ORDER_LIST_MY_REQUEST:
       return {
+        ...state,
+        loading: true,
+      };
+
+    case OrderActionTypes.ORDER_LIST_MY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        orders: action.payload,
+      };
+
+    case OrderActionTypes.ORDER_LIST_MY_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case OrderActionTypes.ORDER_LIST_MY_RESET:
+      return {
+        ...state,
         loading: false,
         error: "",
-        success: false,
+        orders: [],
       };
 
     default:

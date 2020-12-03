@@ -121,6 +121,14 @@ export const userDetailsReducer: Reducer<
         error: action.payload,
       };
 
+    case UserActionTypes.USER_DETAILS_RESET:
+      return {
+        ...state,
+        loading: false,
+        error: "",
+        user: null,
+      };
+
     default:
       return state;
   }

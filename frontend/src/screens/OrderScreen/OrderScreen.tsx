@@ -1,28 +1,45 @@
-import React, { FC, Fragment, useEffect } from "react";
+import React, { FC, Fragment, useEffect, useState } from "react";
 import { Card, Col, Image, ListGroup, Row } from "react-bootstrap";
+import axios from "axios";
+import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, RouteComponentProps } from "react-router-dom";
-import { ThunkDispatch } from "redux-thunk";
 import Loader from "../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
 import { IApplicationState } from "../../redux/store/store";
 import {
   IOrder,
   IOrderDetailsState,
-  OrderActions,
+  IOrderPayState,
+  IPaymentResult,
+  OrderActionTypes,
 } from "../../redux/types/orderTypes";
-import { getOrderDetails } from "./../../redux/actions/orderActions";
+import {
+  getOrderDetails,
+  payOrder,
+} from "./../../redux/actions/orderActions";
+// import { IUserLoginState } from "../../redux/types/userTypes";
 
 const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
   match: {
     params: { id: orderId },
   },
 }) => {
-  const dispatch: ThunkDispatch<
-    IApplicationState,
-    string,
-    OrderActions
-  > = useDispatch();
+  const [sdkReady, setSdkReady] = useState(false);
+  const [clientId, setClientId] = useState("");
+
+  const fakePaymentResult: IPaymentResult = {
+    id: Math.random() + orderId,
+    intent: "CAPTURE",
+    status: "COMPLETED",
+    update_time: new Date(),
+    payer: {
+      email_address: "payPalFakeClient@gmail.com",
+    },
+    create_time: new Date(),
+  };
+
+  const dispatch = useDispatch();
 
   const orderDetails = useSelector<
     IApplicationState,
@@ -31,7 +48,19 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
 
   const { error, loading, order } = orderDetails;
 
-  if (!loading) {
+  // const userLogin = useSelector<IApplicationState, IUserLoginState>(
+  //   state => state.userLogin
+  // );
+
+  // const { userInfo } = userLogin;
+
+  const orderPay = useSelector<IApplicationState, IOrderPayState>(
+    state => state.orderPay
+  );
+
+  const { success: successPay, loading: loadingPay } = orderPay;
+
+  if (!loading && order) {
     order.itemsPrice = order.orderItems.reduce(
       (acc, item) => acc + item.price * item.qty,
       0
@@ -39,8 +68,39 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
   }
 
   useEffect(() => {
-    dispatch(getOrderDetails(orderId));
-  }, [dispatch, orderId]);
+    const getClientId = async () => {
+      const { data: clientId } = await axios.get<string>(
+        `/api/config/paypal`
+      );
+      setClientId(clientId);
+    };
+    getClientId();
+  }, [clientId]);
+
+  useEffect(() => {
+    const addPayPalScript = async () => {
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+      script.async = true;
+      script.onload = () => {
+        setSdkReady(true);
+      };
+
+      document.body.appendChild(script);
+    };
+
+    if (!order || successPay) {
+      dispatch({ type: OrderActionTypes.ORDER_PAY_RESET });
+      dispatch(getOrderDetails(orderId));
+    } else if (!order.isPaid) {
+      if (!(window as any).paypal) {
+        addPayPalScript();
+      } else {
+        setSdkReady(true);
+      }
+    }
+  }, [dispatch, orderId, successPay, order, clientId]);
 
   const loadUserDetails = (order: IOrder) => {
     if (order.user) {
@@ -54,7 +114,7 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
             <a href={`mailto:${order.user.email}`}>
               {order.user.email}
             </a>
-          </p>{" "}
+          </p>
         </div>
       );
     } else {
@@ -62,11 +122,17 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
     }
   };
 
+  const successPaymentHandler = (
+    paymentResult: IPaymentResult = fakePaymentResult
+  ) => {
+    dispatch(payOrder(orderId, paymentResult));
+  };
+
   return loading ? (
     <Loader />
   ) : error ? (
     <Message variant="danger">{error}</Message>
-  ) : (
+  ) : order ? (
     <Fragment>
       <h1>Order {order._id}</h1>
       <Row>
@@ -194,12 +260,31 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
                   </Col>
                 </Row>
               </ListGroup.Item>
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+                  {!sdkReady ? (
+                    <Loader />
+                  ) : (
+                    <PayPalButton
+                      onError={() =>
+                        successPaymentHandler(fakePaymentResult)
+                      }
+                      catchError={() =>
+                        successPaymentHandler(fakePaymentResult)
+                      }
+                      amount={order.totalPrice}
+                      onSuccess={successPaymentHandler}
+                    />
+                  )}
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
       </Row>
     </Fragment>
-  );
+  ) : null;
 };
 
 export default OrderScreen;

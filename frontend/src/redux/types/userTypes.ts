@@ -20,6 +20,7 @@ export enum UserActionTypes {
   USER_REGISTER_FAIL = "USER_REGISTER_FAIL",
   USER_DETAILS_REQUEST = "USER_DETAILS_REQUEST",
   USER_DETAILS_SUCCESS = "USER_DETAILS_SUCCESS",
+  USER_DETAILS_RESET = "USER_DETAILS_RESET",
   USER_DETAILS_FAIL = "USER_DETAILS_FAIL",
   USER_UPDATE_PROFILE_REQUEST = "USER_UPDATE_PROFILE_REQUEST",
   USER_UPDATE_PROFILE_SUCCESS = "USER_UPDATE_PROFILE_SUCCESS",
@@ -69,6 +70,10 @@ export interface IUserDetailsFail {
   payload: string;
 }
 
+export interface IUserDetailsReset {
+  type: UserActionTypes.USER_DETAILS_RESET;
+}
+
 export interface IUserUpdateProfileRequest {
   type: UserActionTypes.USER_UPDATE_PROFILE_REQUEST;
 }
@@ -96,6 +101,7 @@ export type UserActions =
   | IUserDetailsRequest
   | IUserDetailsSuccess
   | IUserDetailsFail
+  | IUserDetailsReset
   | IUserUpdateProfileRequest
   | IUserUpdateProfileSuccess
   | IUserUpdateProfileFail

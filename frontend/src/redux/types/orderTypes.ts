@@ -1,10 +1,15 @@
 import { ICartAddress, ICartItem } from "./cartTypes";
 
 export interface IPaymentResult {
-  id: string;
-  status: string;
-  update_time: Date;
-  email_address: string;
+  id?: string;
+  status?: string;
+  update_time?: Date;
+  email_address?: string;
+  create_time?: Date;
+  payer?: {
+    email_address: string;
+  };
+  intent?: string;
 }
 
 export interface IOrder {
@@ -21,6 +26,7 @@ export interface IOrder {
   shippingPrice: number;
   taxPrice: number;
   totalPrice: number;
+  createdAt?: Date;
   user?: {
     name: string;
     email: string;
@@ -38,6 +44,10 @@ export enum OrderActionTypes {
   ORDER_PAY_SUCCESS = "ORDER_PAY_SUCCESS",
   ORDER_PAY_FAIL = "ORDER_PAY_FAIL",
   ORDER_PAY_RESET = "ORDER_PAY_RESET",
+  ORDER_LIST_MY_REQUEST = "ORDER_LIST_MY_REQUEST",
+  ORDER_LIST_MY_SUCCESS = "ORDER_LIST_MY_SUCCESS",
+  ORDER_LIST_MY_FAIL = "ORDER_LIST_MY_FAIL",
+  ORDER_LIST_MY_RESET = "ORDER_LIST_MY_RESET",
 }
 
 export interface IOrderCreateRequest {
@@ -86,6 +96,24 @@ export interface IOrderPayReset {
   type: OrderActionTypes.ORDER_PAY_RESET;
 }
 
+export interface IOrderListMyRequest {
+  type: OrderActionTypes.ORDER_LIST_MY_REQUEST;
+}
+
+export interface IOrderListMySuccess {
+  type: OrderActionTypes.ORDER_LIST_MY_SUCCESS;
+  payload: IOrder[];
+}
+
+export interface IOrderListMyFail {
+  type: OrderActionTypes.ORDER_LIST_MY_FAIL;
+  payload: string;
+}
+
+export interface IOrderListMyReset {
+  type: OrderActionTypes.ORDER_LIST_MY_RESET;
+}
+
 export type OrderActions =
   | IOrderCreateRequest
   | IOrderCreateSuccess
@@ -96,7 +124,11 @@ export type OrderActions =
   | IOrderPayRequest
   | IOrderPaySuccess
   | IOrderPayFail
-  | IOrderPayReset;
+  | IOrderPayReset
+  | IOrderListMyRequest
+  | IOrderListMySuccess
+  | IOrderListMyFail
+  | IOrderListMyReset;
 
 export interface IOrderCreateState {
   loading: boolean;
@@ -110,11 +142,17 @@ export interface IOrderDetailsState {
   shippingAddress: ICartAddress;
   error: string;
   loading: boolean;
-  order: IOrder;
+  order: IOrder | null;
 }
 
 export interface IOrderPayState {
+  loading?: boolean;
+  success?: boolean;
+  error?: string;
+}
+
+export interface IOrderListMyState {
+  orders: IOrder[];
   loading: boolean;
-  success: boolean;
   error: string;
 }

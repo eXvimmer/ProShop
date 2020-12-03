@@ -134,3 +134,42 @@ export const payOrder: ActionCreator<
     });
   }
 };
+
+export const listMyOrders: ActionCreator<
+  ThunkAction<Promise<void>, IApplicationState, null, OrderActions>
+> = () => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const token = userInfo ? userInfo.token : "";
+
+    dispatch({
+      type: OrderActionTypes.ORDER_LIST_MY_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.get<IOrder[]>(
+      `/api/orders/myorders`,
+      config
+    );
+
+    dispatch({
+      type: OrderActionTypes.ORDER_LIST_MY_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: OrderActionTypes.ORDER_LIST_MY_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
