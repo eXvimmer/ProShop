@@ -6,9 +6,13 @@ import { RouteComponentProps } from "react-router-dom";
 import { ThunkDispatch } from "redux-thunk";
 import Loader from "../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
-import { listUsers } from "../../redux/actions/userActions";
+import {
+  deleteUser,
+  listUsers,
+} from "../../redux/actions/userActions";
 import { IApplicationState } from "../../redux/store/store";
 import {
+  IUserDeleteState,
   IUserListState,
   IUserLoginState,
   UserActions,
@@ -17,7 +21,7 @@ import {
 const UserListScreen: FC<RouteComponentProps> = ({ history }) => {
   const dispatch: ThunkDispatch<
     IApplicationState,
-    null,
+    any,
     UserActions
   > = useDispatch();
 
@@ -31,15 +35,24 @@ const UserListScreen: FC<RouteComponentProps> = ({ history }) => {
   );
   const { userInfo } = userLogin;
 
+  const userDelete = useSelector<IApplicationState, IUserDeleteState>(
+    state => state.userDelete
+  );
+  const { success: successDelete } = userDelete;
+
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listUsers());
     } else {
       history.push("/login");
     }
-  }, [dispatch, userInfo, history]);
+  }, [dispatch, userInfo, history, successDelete]);
 
-  const deleteHandler = (id: string): void => {};
+  const deleteHandler = (id: string): void => {
+    if (window.confirm("Are you sure?")) {
+      dispatch(deleteUser(id));
+    }
+  };
 
   return (
     <Fragment>

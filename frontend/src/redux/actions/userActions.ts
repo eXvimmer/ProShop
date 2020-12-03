@@ -242,3 +242,38 @@ export const listUsers: ActionCreator<
     });
   }
 };
+
+export const deleteUser: ActionCreator<
+  ThunkAction<Promise<void>, IApplicationState, string, UserActions>
+> = (id: string) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const token = userInfo ? userInfo.token : "";
+
+    dispatch({
+      type: UserActionTypes.USER_DELETE_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    await axios.delete(`/api/users/${id}`, config);
+
+    dispatch({
+      type: UserActionTypes.USER_DELETE_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: UserActionTypes.USER_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

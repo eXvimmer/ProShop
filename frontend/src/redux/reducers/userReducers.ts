@@ -1,6 +1,7 @@
 // TODO: Do something about repeated codes
 import { Reducer } from "redux";
 import {
+  IUserDeleteState,
   IUserDetailsState,
   IUserListState,
   IUserLoginState,
@@ -213,6 +214,42 @@ export const userListReducer: Reducer<IUserListState, UserActions> = (
         loading: false,
         error: "",
         users: [],
+      };
+
+    default:
+      return state;
+  }
+};
+
+const initialUserDeleteState: IUserDeleteState = {
+  loading: false,
+  error: "",
+  success: false,
+};
+
+export const userDeleteReducer: Reducer<
+  IUserDeleteState,
+  UserActions
+> = (state = initialUserDeleteState, action) => {
+  switch (action.type) {
+    case UserActionTypes.USER_DELETE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case UserActionTypes.USER_DELETE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
+
+    case UserActionTypes.USER_DELETE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
 
     default:
