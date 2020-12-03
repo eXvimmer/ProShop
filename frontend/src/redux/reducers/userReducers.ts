@@ -2,6 +2,7 @@
 import { Reducer } from "redux";
 import {
   IUserDetailsState,
+  IUserListState,
   IUserLoginState,
   IUserRegisterState,
   IUserUpdateProfileState,
@@ -169,6 +170,42 @@ export const userUpdateProfileReducer: Reducer<
         loading: false,
         error: action.payload,
         success: false,
+      };
+
+    default:
+      return state;
+  }
+};
+
+const initialUserListState: IUserListState = {
+  users: [],
+  loading: false,
+  error: "",
+};
+
+export const userListReducer: Reducer<IUserListState, UserActions> = (
+  state = initialUserListState,
+  action
+) => {
+  switch (action.type) {
+    case UserActionTypes.USER_LIST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case UserActionTypes.USER_LIST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        users: action.payload,
+      };
+
+    case UserActionTypes.USER_LIST_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
 
     default:

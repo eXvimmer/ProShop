@@ -16,6 +16,7 @@ import {
 import { ICartAddress, ICartState } from "../types/cartTypes";
 import {
   IUserDetailsState,
+  IUserListState,
   IUserLoginState,
   IUserRegisterState,
   IUserUpdateProfileState,
@@ -35,6 +36,7 @@ export interface IApplicationState {
   userRegister: IUserRegisterState;
   userDetails: IUserDetailsState;
   userUpdateProfile: IUserUpdateProfileState;
+  userList: IUserListState;
   orderCreate: IOrderCreateState;
   orderDetails: IOrderDetailsState;
   orderPay: IOrderPayState;

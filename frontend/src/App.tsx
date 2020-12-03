@@ -13,6 +13,7 @@ import ShippingScreen from "./screens/ShippingScreen/ShippingScreen";
 import PaymentScreen from "./screens/PaymentScreen/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen/OrderScreen";
+import UserListScreen from "./screens/UserListScreen/UserListScreen";
 
 /* TODO: change all unassigned dispatch types */
 
@@ -31,6 +32,10 @@ const App: FC = () => {
             <Route path="/placeorder" component={PlaceOrderScreen} />
             <Route path="/order/:id" component={OrderScreen} />
             <Route path="/profile" component={ProfileScreen} />
+            <Route
+              path="/admin/userlist"
+              component={UserListScreen}
+            />
             {/* NOTE
              * /cart/:id? means that id is optional
              */}
