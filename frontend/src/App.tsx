@@ -16,6 +16,7 @@ import OrderScreen from "./screens/OrderScreen/OrderScreen";
 import UserListScreen from "./screens/UserListScreen/UserListScreen";
 import UserEditScreen from "./screens/UserEditScreen/UserEditScreen";
 import ProductListScreen from "./screens/ProductListScreen/ProductListScreen";
+import ProductEditScreen from "./screens/ProductEditScreen/ProductEditScreen";
 
 /* TODO: change all unassigned dispatch types */
 
@@ -45,6 +46,10 @@ const App: FC = () => {
             <Route
               path="/admin/user/:id/edit"
               component={UserEditScreen}
+            />
+            <Route
+              path="/admin/product/:id/edit"
+              component={ProductEditScreen}
             />
             {/* NOTE
              * /cart/:id? means that id is optional
