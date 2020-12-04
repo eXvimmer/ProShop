@@ -15,6 +15,7 @@ import PlaceOrderScreen from "./screens/PlaceOrderScreen/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen/OrderScreen";
 import UserListScreen from "./screens/UserListScreen/UserListScreen";
 import UserEditScreen from "./screens/UserEditScreen/UserEditScreen";
+import ProductListScreen from "./screens/ProductListScreen/ProductListScreen";
 
 /* TODO: change all unassigned dispatch types */
 
@@ -36,6 +37,10 @@ const App: FC = () => {
             <Route
               path="/admin/userlist"
               component={UserListScreen}
+            />
+            <Route
+              path="/admin/productlist"
+              component={ProductListScreen}
             />
             <Route
               path="/admin/user/:id/edit"
