@@ -1,3 +1,4 @@
+import e from "express";
 import asyncHandler from "express-async-handler";
 import Product from "../models/productModel.js";
 
@@ -40,6 +41,68 @@ export const deleteProduct = asyncHandler(async (req, res) => {
     res.json({
       message: "Product Removed!",
     });
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
+
+/* ANCHOR
+ * @DESC    Create a product
+ * @Route   POST /api/products
+ * @ACCESS  Private/Admin
+ */
+export const createProduct = asyncHandler(async (req, res) => {
+  const product = new Product({
+    name: "Sample Name",
+    price: 0.0,
+    user: req.user._id,
+    image: "/images/sample.jpg",
+    brand: "Sample Brand",
+    category: "Sample Category",
+    countInStock: 0,
+    numReviews: 0,
+    description: "Sample Description",
+  });
+
+  const createdProduct = await product.save();
+  res.status(201).json(createdProduct);
+});
+
+/* ANCHOR
+ * @DESC    Update a product
+ * @Route   PUT /api/products/:id
+ * @ACCESS  Private/Admin
+ */
+export const udpateProduct = asyncHandler(async (req, res) => {
+  const {
+    name,
+    price,
+    description,
+    image,
+    brand,
+    category,
+    countInStock,
+  } = req.body;
+
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    product.name = name;
+    product.price = price;
+    product.description = description;
+    product.image = image;
+    product.brand = brand;
+    product.category = category;
+    product.countInStock = countInStock;
+
+    const updatedProduct = await product.save();
+    /* 
+     NOTE
+     * I didn't use status(204), because I want to get back
+     * the prodcuts as response.
+    */
+    res.status(200).json(updatedProduct);
   } else {
     res.status(404);
     throw new Error("Product not found");
