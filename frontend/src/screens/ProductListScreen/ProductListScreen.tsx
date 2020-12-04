@@ -20,10 +20,7 @@ import {
   UserActions,
 } from "../../redux/types/userTypes";
 
-const ProductListScreen: FC<RouteComponentProps> = ({
-  history,
-  match,
-}) => {
+const ProductListScreen: FC<RouteComponentProps> = ({ history }) => {
   const dispatch: ThunkDispatch<
     IApplicationState,
     any,

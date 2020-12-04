@@ -98,6 +98,8 @@ export const productDeleteReducer: Reducer<
       return {
         ...state,
         loading: true,
+        error: "",
+        success: false,
       };
 
     case ProductActionTypes.PRODUCT_DELETE_SUCCESS:
@@ -105,12 +107,14 @@ export const productDeleteReducer: Reducer<
         ...state,
         loading: false,
         success: true,
+        error: "",
       };
 
     case ProductActionTypes.PRODUCT_DELETE_FAIL:
       return {
         ...state,
         loading: false,
+        success: false,
         error: action.payload,
       };
 
