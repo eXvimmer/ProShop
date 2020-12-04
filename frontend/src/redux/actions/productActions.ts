@@ -102,3 +102,43 @@ export const deleteProduct: ActionCreator<
     });
   }
 };
+
+export const createProduct: ActionCreator<
+  ThunkAction<Promise<void>, IApplicationState, null, ProductActions>
+> = () => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const token = userInfo ? userInfo.token : "";
+
+    dispatch({
+      type: ProductActionTypes.PRODUCT_CREATE_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.post<IProduct>(
+      `/api/products`,
+      {},
+      config
+    );
+
+    dispatch({
+      type: ProductActionTypes.PRODUCT_CREATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ProductActionTypes.PRODUCT_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

@@ -11,6 +11,7 @@ import {
   productListReducer,
   productDetailsReducer,
   productDeleteReducer,
+  productCreateReducer,
 } from "./productReducers";
 import {
   userDeleteReducer,
@@ -25,6 +26,7 @@ import {
 const rootReducer = combineReducers<IApplicationState>({
   productList: productListReducer,
   productDetails: productDetailsReducer,
+  productCreate: productCreateReducer,
   productDelete: productDeleteReducer,
   cart: cartReducer,
   userLogin: userLoginReducer,

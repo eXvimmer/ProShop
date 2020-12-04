@@ -7,24 +7,25 @@ import { ThunkDispatch } from "redux-thunk";
 import Loader from "../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
 import {
+  createProduct,
   deleteProduct,
   listProducts,
 } from "../../redux/actions/productActions";
 import { IApplicationState } from "../../redux/store/store";
 import {
+  IProductCreateState,
   IProductDeleteState,
   IProductListState,
+  ProductActions,
+  ProductActionTypes,
 } from "../../redux/types/productTypes";
-import {
-  IUserLoginState,
-  UserActions,
-} from "../../redux/types/userTypes";
+import { IUserLoginState } from "../../redux/types/userTypes";
 
 const ProductListScreen: FC<RouteComponentProps> = ({ history }) => {
   const dispatch: ThunkDispatch<
     IApplicationState,
     any,
-    UserActions
+    ProductActions
   > = useDispatch();
 
   const productList = useSelector<
@@ -43,18 +44,44 @@ const ProductListScreen: FC<RouteComponentProps> = ({ history }) => {
     success: successDelete,
   } = productDelete;
 
+  const productCreate = useSelector<
+    IApplicationState,
+    IProductCreateState
+  >(state => state.productCreate);
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+    product: createdProduct,
+  } = productCreate;
+
   const userLogin = useSelector<IApplicationState, IUserLoginState>(
     state => state.userLogin
   );
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listProducts());
-    } else {
+    dispatch({
+      type: ProductActionTypes.PRODUCT_CREATE_RESET,
+    });
+
+    if (!userInfo || !userInfo.isAdmin) {
       history.push("/login");
     }
-  }, [dispatch, userInfo, history, successDelete]);
+
+    if (successCreate) {
+      history.push(`/admin/product/${createdProduct?._id}/edit`);
+    } else {
+      dispatch(listProducts());
+    }
+  }, [
+    dispatch,
+    userInfo,
+    history,
+    successDelete,
+    successCreate,
+    createdProduct,
+  ]);
 
   const deleteHandler = (id: string): void => {
     if (window.confirm("Are you sure?")) {
@@ -62,7 +89,9 @@ const ProductListScreen: FC<RouteComponentProps> = ({ history }) => {
     }
   };
 
-  const createPrudoctHandler = (/* product: IProduct */) => {};
+  const createPrudoctHandler = () => {
+    dispatch(createProduct());
+  };
 
   return (
     <Fragment>
@@ -79,6 +108,10 @@ const ProductListScreen: FC<RouteComponentProps> = ({ history }) => {
       {loadingDelete && <Loader />}
       {errorDelete && (
         <Message variant="danger">{errorDelete}</Message>
+      )}
+      {loadingCreate && <Loader />}
+      {errorCreate && (
+        <Message variant="danger">{errorCreate}</Message>
       )}
       {loading ? (
         <Loader />

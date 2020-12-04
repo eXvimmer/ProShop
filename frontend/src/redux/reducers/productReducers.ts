@@ -5,6 +5,7 @@ import {
   IProductDetailsState,
   ProductActions,
   IProductDeleteState,
+  IProductCreateState,
 } from "../types/productTypes";
 
 const intialProductListState: IProductListState = {
@@ -117,6 +118,50 @@ export const productDeleteReducer: Reducer<
         success: false,
         error: action.payload,
       };
+
+    default:
+      return state;
+  }
+};
+
+const initialProductCreateState: IProductCreateState = {
+  loading: false,
+  error: "",
+  success: false,
+  product: null,
+};
+
+export const productCreateReducer: Reducer<
+  IProductCreateState,
+  ProductActions
+> = (state = initialProductCreateState, action) => {
+  switch (action.type) {
+    case ProductActionTypes.PRODUCT_CREATE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: "",
+        success: false,
+      };
+
+    case ProductActionTypes.PRODUCT_CREATE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        error: "",
+        product: action.payload,
+      };
+
+    case ProductActionTypes.PRODUCT_CREATE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case ProductActionTypes.PRODUCT_CREATE_RESET:
+      return initialProductCreateState;
 
     default:
       return state;
