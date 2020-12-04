@@ -18,6 +18,7 @@ export enum ProductActionTypes {
   PRODUCT_DETAILS_REQUEST = "PRODUCT_DETAILS_REQUEST",
   PRODUCT_DETAILS_SUCCESS = "PRODUCT_DETAILS_SUCCESS",
   PRODUCT_DETAILS_FAIL = "PRODUCT_DETAILS_FAIL",
+  PRODUCT_DETAILS_RESET = "PRODUCT_DETAILS_RESET",
   PRODUCT_DELETE_REQUEST = "PRODUCT_DELETE_REQUEST",
   PRODUCT_DELETE_SUCCESS = "PRODUCT_DELETE_SUCCESS",
   PRODUCT_DELETE_FAIL = "PRODUCT_DELETE_FAIL",
@@ -25,6 +26,10 @@ export enum ProductActionTypes {
   PRODUCT_CREATE_SUCCESS = "PRODUCT_CREATE_SUCCESS",
   PRODUCT_CREATE_FAIL = "PRODUCT_CREATE_FAIL",
   PRODUCT_CREATE_RESET = "PRODUCT_CREATE_RESET",
+  PRODUCT_UPDATE_REQUEST = "PRODUCT_UPDATE_REQUEST",
+  PRODUCT_UPDATE_SUCCESS = "PRODUCT_UPDATE_SUCCESS",
+  PRODUCT_UPDATE_FAIL = "PRODUCT_UPDATE_FAIL",
+  PRODUCT_UPDATE_RESET = "PRODUCT_UPDATE_RESET",
 }
 
 export interface IProductsListRequest {
@@ -53,6 +58,10 @@ export interface IProductDetailsSuccess {
 export interface IProductDetailsFail {
   type: ProductActionTypes.PRODUCT_DETAILS_FAIL;
   payload: string;
+}
+
+export interface IProductDetailsReset {
+  type: ProductActionTypes.PRODUCT_DETAILS_RESET;
 }
 
 export interface IProductDeleteRequest {
@@ -86,6 +95,24 @@ export interface IProductCreateReset {
   type: ProductActionTypes.PRODUCT_CREATE_RESET;
 }
 
+export interface IProductUpdateRequest {
+  type: ProductActionTypes.PRODUCT_UPDATE_REQUEST;
+}
+
+export interface IProductUpdateSuccess {
+  type: ProductActionTypes.PRODUCT_UPDATE_SUCCESS;
+  payload: IProduct;
+}
+
+export interface IProductUpdateFail {
+  type: ProductActionTypes.PRODUCT_UPDATE_FAIL;
+  payload: string;
+}
+
+export interface IProductUpdateReset {
+  type: ProductActionTypes.PRODUCT_UPDATE_RESET;
+}
+
 export type ProductActions =
   | IProductsListRequest
   | IProductsListSuccess
@@ -93,13 +120,18 @@ export type ProductActions =
   | IProductDetailsRequest
   | IProductDetailsSuccess
   | IProductDetailsFail
+  | IProductDetailsReset
   | IProductDeleteRequest
   | IProductDeleteSuccess
   | IProductDeleteFail
   | IProductCreateRequest
   | IProductCreateSuccess
   | IProductCreateFail
-  | IProductCreateReset;
+  | IProductCreateReset
+  | IProductUpdateRequest
+  | IProductUpdateSuccess
+  | IProductUpdateFail
+  | IProductUpdateReset;
 
 export interface IProductListState {
   readonly products: IProduct[];
@@ -120,6 +152,13 @@ export interface IProductDeleteState {
 }
 
 export interface IProductCreateState {
+  loading: boolean;
+  success: boolean;
+  error: string;
+  product: IProduct | null;
+}
+
+export interface IProductUpdateState {
   loading: boolean;
   success: boolean;
   error: string;

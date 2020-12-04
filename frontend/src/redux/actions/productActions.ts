@@ -142,3 +142,49 @@ export const createProduct: ActionCreator<
     });
   }
 };
+
+export const updateProduct: ActionCreator<
+  ThunkAction<
+    Promise<void>,
+    IApplicationState,
+    IProduct,
+    ProductActions
+  >
+> = (product: IProduct) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const token = userInfo ? userInfo.token : "";
+
+    dispatch({
+      type: ProductActionTypes.PRODUCT_UPDATE_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.put<IProduct>(
+      `/api/products/${product._id}`,
+      product,
+      config
+    );
+
+    dispatch({
+      type: ProductActionTypes.PRODUCT_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ProductActionTypes.PRODUCT_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

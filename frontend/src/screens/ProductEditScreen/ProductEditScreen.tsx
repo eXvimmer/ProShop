@@ -15,9 +15,14 @@ import Loader from "../../components/Loader/Loader";
 import { ThunkDispatch } from "redux-thunk";
 import {
   IProductDetailsState,
+  IProductUpdateState,
   ProductActions,
+  ProductActionTypes,
 } from "../../redux/types/productTypes";
-import { listProductDetails } from "../../redux/actions/productActions";
+import {
+  listProductDetails,
+  updateProduct,
+} from "../../redux/actions/productActions";
 
 const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({
   match: {
@@ -27,7 +32,7 @@ const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({
 }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState("/images/sample.jpg");
+  const [image, setImage] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
@@ -46,24 +51,57 @@ const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({
 
   const { error, loading, product } = productDetails;
 
+  const productUpdate = useSelector<
+    IApplicationState,
+    IProductUpdateState
+  >(state => state.productUpdate);
+
+  const {
+    error: errorUpdate,
+    loading: loadingUpdate,
+    success: successUpdate,
+  } = productUpdate;
+
   useEffect(() => {
-    if (!product || !product.name || product._id !== productId) {
-      dispatch(listProductDetails(productId));
+    if (successUpdate) {
+      dispatch({ type: ProductActionTypes.PRODUCT_UPDATE_RESET });
+
+      dispatch({
+        type: ProductActionTypes.PRODUCT_DETAILS_RESET,
+      });
+
+      history.push(`/admin/productlist`);
     } else {
-      setName(product.name);
-      setPrice(product.price);
-      setImage(product.image);
-      setBrand(product.brand);
-      setCategory(product.category);
-      setDescription(product.description);
-      setCountInStock(product.countInStock);
+      if (!product || !product.name || product._id !== productId) {
+        dispatch(listProductDetails(productId));
+      } else {
+        setName(product.name);
+        setPrice(product.price);
+        setImage(product.image);
+        setBrand(product.brand);
+        setCategory(product.category);
+        setDescription(product.description);
+        setCountInStock(product.countInStock);
+      }
     }
-  }, [dispatch, product, productId]);
+  }, [dispatch, history, product, productId, successUpdate]);
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // update product
+    dispatch(
+      updateProduct({
+        _id: productId,
+        name,
+        price,
+        image,
+        brand,
+        category,
+        description,
+        countInStock,
+      })
+    );
   };
+
   return (
     <Fragment>
       <Link to="/admin/productlist" className="btn btn-light my-3">
@@ -71,10 +109,10 @@ const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({
       </Link>
       <FormContainer>
         <h1>Edit Product</h1>
-        {/* {loadingUpdate && <Loader />}
+        {loadingUpdate && <Loader />}
         {errorUpdate && (
           <Message variant="danger">{errorUpdate}</Message>
-        )} */}
+        )}
         {loading ? (
           <Loader />
         ) : error ? (
@@ -96,7 +134,7 @@ const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({
                 type="number"
                 placeholder="Enter Price"
                 value={price}
-                onChange={e => setPrice(parseFloat(e.target.value))}
+                onChange={e => setPrice(Number(e.target.value))}
               ></Form.Control>
             </Form.Group>
             <Form.Group controlId="image">
@@ -124,7 +162,7 @@ const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({
                 placeholder="Enter Count In Stock"
                 value={countInStock}
                 onChange={e =>
-                  setCountInStock(parseFloat(e.target.value))
+                  setCountInStock(Number(e.target.value))
                 }
               ></Form.Control>
             </Form.Group>
