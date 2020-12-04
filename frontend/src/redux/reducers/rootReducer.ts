@@ -18,6 +18,7 @@ import {
   userLoginReducer,
   userRegisterReducer,
   userUpdateProfileReducer,
+  userUpdateReducer,
 } from "./userReducers";
 
 const rootReducer = combineReducers<IApplicationState>({
@@ -30,6 +31,7 @@ const rootReducer = combineReducers<IApplicationState>({
   userUpdateProfile: userUpdateProfileReducer,
   userList: userListReducer,
   userDelete: userDeleteReducer,
+  userUpdate: userUpdateReducer,
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
   orderPay: orderPayReducer,

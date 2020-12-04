@@ -277,3 +277,53 @@ export const deleteUser: ActionCreator<
     });
   }
 };
+
+export const updateUser: ActionCreator<
+  ThunkAction<
+    Promise<void>,
+    IApplicationState,
+    IUserInfo,
+    UserActions
+  >
+> = (user: IUserInfo) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const token = userInfo ? userInfo.token : "";
+
+    dispatch({
+      type: UserActionTypes.USER_UPDATE_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.put<IUserInfo>(
+      `/api/users/${user._id}`,
+      user,
+      config
+    );
+
+    dispatch({
+      type: UserActionTypes.USER_UPDATE_SUCCESS,
+    });
+
+    dispatch({
+      type: UserActionTypes.USER_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: UserActionTypes.USER_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

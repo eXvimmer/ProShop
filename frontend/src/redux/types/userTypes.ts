@@ -33,6 +33,10 @@ export enum UserActionTypes {
   USER_DELETE_REQUEST = "USER_DELETE_REQUEST",
   USER_DELETE_SUCCESS = "USER_DELETE_SUCCESS",
   USER_DELETE_FAIL = "USER_DELETE_FAIL",
+  USER_UPDATE_REQUEST = "USER_UPDATE_REQUEST",
+  USER_UPDATE_SUCCESS = "USER_UPDATE_SUCCESS",
+  USER_UPDATE_FAIL = "USER_UPDATE_FAIL",
+  USER_UPDATE_RESET = "USER_UPDATE_RESET",
 }
 
 export interface IUserLoginRequest {
@@ -124,6 +128,21 @@ export interface IUserDeleteFail {
   payload: string;
 }
 
+export interface IUserUpdateRequest {
+  type: UserActionTypes.USER_UPDATE_REQUEST;
+}
+export interface IUserUpdateSuccess {
+  type: UserActionTypes.USER_UPDATE_SUCCESS;
+}
+export interface IUserUpdateFail {
+  type: UserActionTypes.USER_UPDATE_FAIL;
+  payload: string;
+}
+
+export interface IUserUpdateReset {
+  type: UserActionTypes.USER_UPDATE_RESET;
+}
+
 export type UserActions =
   | IUserLoginRequest
   | IUserLoginSuccess
@@ -146,7 +165,11 @@ export type UserActions =
   | IUserListReset
   | IUserDeleteRequest
   | IUserDeleteSuccess
-  | IUserDeleteFail;
+  | IUserDeleteFail
+  | IUserUpdateRequest
+  | IUserUpdateSuccess
+  | IUserUpdateFail
+  | IUserUpdateReset;
 
 export interface IUserLoginState {
   loading: boolean;
@@ -180,6 +203,13 @@ export interface IUserListState {
 }
 
 export interface IUserDeleteState {
+  loading: boolean;
+  error: string;
+  success: boolean;
+}
+
+export interface IUserUpdateState {
+  user: IUserInfo | null;
   loading: boolean;
   error: string;
   success: boolean;

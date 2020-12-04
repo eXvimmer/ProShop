@@ -21,6 +21,7 @@ import {
   IUserLoginState,
   IUserRegisterState,
   IUserUpdateProfileState,
+  IUserUpdateState,
 } from "../types/userTypes";
 import {
   IOrderCreateState,
@@ -39,6 +40,7 @@ export interface IApplicationState {
   userUpdateProfile: IUserUpdateProfileState;
   userList: IUserListState;
   userDelete: IUserDeleteState;
+  userUpdate: IUserUpdateState;
   orderCreate: IOrderCreateState;
   orderDetails: IOrderDetailsState;
   orderPay: IOrderPayState;
