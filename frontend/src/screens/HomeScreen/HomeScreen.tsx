@@ -5,7 +5,7 @@ import Product from "../../components/Product/Product";
 import {
   IProduct,
   IProductListState,
-  ProductListActions,
+  ProductActions,
 } from "../../redux/types/productTypes";
 import { listProducts } from "../../redux/actions/productActions";
 import { IApplicationState } from "../../redux/store/store";
@@ -22,7 +22,7 @@ const HomeScreen: FC = () => {
   const dispatch: ThunkDispatch<
     IApplicationState,
     null,
-    ProductListActions
+    ProductActions
   > = useDispatch();
   /* NOTE
    * We use useSelector here. It's kind of a combination of

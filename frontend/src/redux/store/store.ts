@@ -10,6 +10,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 import rootReducer from "../reducers/rootReducer";
 import {
+  IProductDeleteState,
   IProductDetailsState,
   IProductListState,
 } from "../types/productTypes";
@@ -33,6 +34,7 @@ import {
 export interface IApplicationState {
   productList: IProductListState;
   productDetails: IProductDetailsState;
+  productDelete: IProductDeleteState;
   cart: ICartState;
   userLogin: IUserLoginState;
   userRegister: IUserRegisterState;

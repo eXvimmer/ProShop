@@ -1,10 +1,10 @@
 import { Reducer } from "redux";
 import {
   IProductListState,
-  ProductListActions,
   ProductActionTypes,
   IProductDetailsState,
-  ProductDetailsActions,
+  ProductActions,
+  IProductDeleteState,
 } from "../types/productTypes";
 
 const intialProductListState: IProductListState = {
@@ -15,7 +15,7 @@ const intialProductListState: IProductListState = {
 
 export const productListReducer: Reducer<
   IProductListState,
-  ProductListActions
+  ProductActions
 > = (state = intialProductListState, action) => {
   switch (action.type) {
     case ProductActionTypes.PRODUCT_LIST_REQUEST:
@@ -53,7 +53,7 @@ const initialProductDetailsState: IProductDetailsState = {
 
 export const productDetailsReducer: Reducer<
   IProductDetailsState,
-  ProductDetailsActions
+  ProductActions
 > = (state = initialProductDetailsState, action) => {
   switch (action.type) {
     case ProductActionTypes.PRODUCT_DETAILS_REQUEST:
@@ -72,6 +72,42 @@ export const productDetailsReducer: Reducer<
       };
 
     case ProductActionTypes.PRODUCT_DETAILS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+const initialProductDeleteState: IProductDeleteState = {
+  loading: false,
+  error: "",
+  success: false,
+};
+
+export const productDeleteReducer: Reducer<
+  IProductDeleteState,
+  ProductActions
+> = (state = initialProductDeleteState, action) => {
+  switch (action.type) {
+    case ProductActionTypes.PRODUCT_DELETE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case ProductActionTypes.PRODUCT_DELETE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
+
+    case ProductActionTypes.PRODUCT_DELETE_FAIL:
       return {
         ...state,
         loading: false,

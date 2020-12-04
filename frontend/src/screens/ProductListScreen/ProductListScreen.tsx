@@ -6,10 +6,13 @@ import { RouteComponentProps } from "react-router-dom";
 import { ThunkDispatch } from "redux-thunk";
 import Loader from "../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
-import { listProducts } from "../../redux/actions/productActions";
+import {
+  deleteProduct,
+  listProducts,
+} from "../../redux/actions/productActions";
 import { IApplicationState } from "../../redux/store/store";
 import {
-  IProduct,
+  IProductDeleteState,
   IProductListState,
 } from "../../redux/types/productTypes";
 import {
@@ -33,6 +36,16 @@ const ProductListScreen: FC<RouteComponentProps> = ({
   >(state => state.productList);
   const { loading, error, products } = productList;
 
+  const productDelete = useSelector<
+    IApplicationState,
+    IProductDeleteState
+  >(state => state.productDelete);
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = productDelete;
+
   const userLogin = useSelector<IApplicationState, IUserLoginState>(
     state => state.userLogin
   );
@@ -44,11 +57,11 @@ const ProductListScreen: FC<RouteComponentProps> = ({
     } else {
       history.push("/login");
     }
-  }, [dispatch, userInfo, history]);
+  }, [dispatch, userInfo, history, successDelete]);
 
   const deleteHandler = (id: string): void => {
     if (window.confirm("Are you sure?")) {
-      // delete products
+      dispatch(deleteProduct(id));
     }
   };
 
@@ -66,6 +79,10 @@ const ProductListScreen: FC<RouteComponentProps> = ({
           </Button>
         </Col>
       </Row>
+      {loadingDelete && <Loader />}
+      {errorDelete && (
+        <Message variant="danger">{errorDelete}</Message>
+      )}
       {loading ? (
         <Loader />
       ) : error ? (

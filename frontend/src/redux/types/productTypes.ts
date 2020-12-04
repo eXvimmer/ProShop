@@ -18,6 +18,9 @@ export enum ProductActionTypes {
   PRODUCT_DETAILS_REQUEST = "PRODUCT_DETAILS_REQUEST",
   PRODUCT_DETAILS_SUCCESS = "PRODUCT_DETAILS_SUCCESS",
   PRODUCT_DETAILS_FAIL = "PRODUCT_DETAILS_FAIL",
+  PRODUCT_DELETE_REQUEST = "PRODUCT_DELETE_REQUEST",
+  PRODUCT_DELETE_SUCCESS = "PRODUCT_DELETE_SUCCESS",
+  PRODUCT_DELETE_FAIL = "PRODUCT_DELETE_FAIL",
 }
 
 export interface IProductsListRequest {
@@ -48,15 +51,29 @@ export interface IProductDetailsFail {
   payload: string;
 }
 
-export type ProductListActions =
+export interface IProductDeleteRequest {
+  type: ProductActionTypes.PRODUCT_DELETE_REQUEST;
+}
+
+export interface IProductDeleteSuccess {
+  type: ProductActionTypes.PRODUCT_DELETE_SUCCESS;
+}
+
+export interface IProductDeleteFail {
+  type: ProductActionTypes.PRODUCT_DELETE_FAIL;
+  payload: string;
+}
+
+export type ProductActions =
   | IProductsListRequest
   | IProductsListSuccess
-  | IProductsListFail;
-
-export type ProductDetailsActions =
+  | IProductsListFail
   | IProductDetailsRequest
   | IProductDetailsSuccess
-  | IProductDetailsFail;
+  | IProductDetailsFail
+  | IProductDeleteRequest
+  | IProductDeleteSuccess
+  | IProductDeleteFail;
 
 export interface IProductListState {
   readonly products: IProduct[];
@@ -67,5 +84,11 @@ export interface IProductListState {
 export interface IProductDetailsState {
   readonly product: IProduct | null;
   readonly loading: boolean;
+  error: string;
+}
+
+export interface IProductDeleteState {
+  loading: boolean;
+  success: boolean;
   error: string;
 }

@@ -21,8 +21,8 @@ import Loader from "../../components/Loader/Loader";
 import { ThunkDispatch } from "redux-thunk";
 import { IApplicationState } from "../../redux/store/store";
 import {
-  ProductDetailsActions,
   IProductDetailsState,
+  ProductActions,
 } from "../../redux/types/productTypes";
 import { listProductDetails } from "../../redux/actions/productActions";
 import Message from "../../components/Message/Message";
@@ -38,7 +38,7 @@ const ProductScreen: FC<RouteComponentProps<{ id: string }>> = ({
   const dispatch: ThunkDispatch<
     IApplicationState,
     string,
-    ProductDetailsActions
+    ProductActions
   > = useDispatch();
 
   const productDetails = useSelector<

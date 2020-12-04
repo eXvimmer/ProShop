@@ -2,20 +2,14 @@ import { ActionCreator, Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
 import axios from "axios";
 import {
-  ProductListActions,
   ProductActionTypes,
-  ProductDetailsActions,
+  ProductActions,
 } from "../types/productTypes";
 import { IApplicationState } from "./../store/store";
 import { IProduct } from "../types/productTypes";
 
 export const listProducts: ActionCreator<
-  ThunkAction<
-    Promise<void>,
-    IApplicationState,
-    null,
-    ProductListActions
-  >
+  ThunkAction<Promise<void>, IApplicationState, null, ProductActions>
 > = () => async (dispatch: Dispatch) => {
   try {
     dispatch({
@@ -43,7 +37,7 @@ export const listProductDetails: ActionCreator<
     Promise<void>,
     IApplicationState,
     string,
-    ProductDetailsActions
+    ProductActions
   >
 > = (id: string) => async (dispatch: Dispatch) => {
   try {
@@ -61,6 +55,46 @@ export const listProductDetails: ActionCreator<
   } catch (error) {
     dispatch({
       type: ProductActionTypes.PRODUCT_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteProduct: ActionCreator<
+  ThunkAction<
+    Promise<void>,
+    IApplicationState,
+    string,
+    ProductActions
+  >
+> = (id: string) => async (dispatch, getState) => {
+  try {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const token = userInfo ? userInfo.token : "";
+
+    dispatch({
+      type: ProductActionTypes.PRODUCT_DELETE_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    await axios.delete(`/api/products/${id}`, config);
+
+    dispatch({
+      type: ProductActionTypes.PRODUCT_DELETE_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: ProductActionTypes.PRODUCT_DELETE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
