@@ -4,7 +4,7 @@ import Product from "../models/productModel.js";
 
 /* ANCHOR
  * @DESC Fetch all products
- * @ROUTE Get /api/products?keyword=phone
+ * @ROUTE Get /api/products?keyword=phone&pageNumber=2
  * @ACCESS Public
  */
 export const getProducts = asyncHandler(async (req, res) => {
@@ -17,9 +17,19 @@ export const getProducts = asyncHandler(async (req, res) => {
       }
     : {};
 
-  const products = await Product.find({ ...keyword });
+  const pageSize = 8;
+  const page = Number(req.query.pageNumber) || 1;
+  const count = await Product.countDocuments({ ...keyword });
 
-  res.json(products);
+  const products = await Product.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.json({
+    products,
+    page,
+    pages: Math.ceil(count / pageSize),
+  });
 });
 
 /* ANCHOR

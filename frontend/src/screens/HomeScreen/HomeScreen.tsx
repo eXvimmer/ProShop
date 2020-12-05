@@ -13,12 +13,14 @@ import { ThunkDispatch } from "redux-thunk";
 import Loader from "./../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
 import { RouteComponentProps } from "react-router-dom";
+import Paginate from "../../components/Paginate/Paginate";
 
-const HomeScreen: FC<RouteComponentProps<{ keyword: string }>> = ({
-  match: {
-    params: { keyword },
-  },
-}) => {
+const HomeScreen: FC<
+  RouteComponentProps<{ keyword: string; pageNumber: string }>
+> = ({ match }) => {
+  const keyword = match.params.keyword;
+  const pageNumber = match.params.pageNumber || "1";
+
   /* NOTE
    * We use useDispatch and dispatch the desired action.
    * This is an alternative for connecting the function to
@@ -40,11 +42,11 @@ const HomeScreen: FC<RouteComponentProps<{ keyword: string }>> = ({
     IProductListState
   >(state => state.productList);
 
-  const { error, loading, products } = productList;
+  const { error, loading, products, page, pages } = productList;
 
   useEffect(() => {
-    dispatch(listProducts(keyword));
-  }, [dispatch, keyword]);
+    dispatch(listProducts(keyword, pageNumber));
+  }, [dispatch, keyword, pageNumber]);
 
   return (
     <Fragment>
@@ -54,15 +56,22 @@ const HomeScreen: FC<RouteComponentProps<{ keyword: string }>> = ({
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <Row>
-          {products.map((product: IProduct) => {
-            return (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            );
-          })}
-        </Row>
+        <Fragment>
+          <Row>
+            {products.map((product: IProduct) => {
+              return (
+                <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                  <Product product={product} />
+                </Col>
+              );
+            })}
+          </Row>
+          <Paginate
+            pages={pages}
+            page={page}
+            keyword={keyword ? keyword : ""}
+          />
+        </Fragment>
       )}
     </Fragment>
   );

@@ -12,6 +12,12 @@ export interface IProduct {
   reviews?: IReview[];
 }
 
+export interface IServerProduct {
+  products: IProduct[];
+  page: number;
+  pages: number;
+}
+
 export interface IReview {
   _id?: string;
   name?: string;
@@ -51,7 +57,7 @@ export interface IProductsListRequest {
 
 export interface IProductsListSuccess {
   type: ProductActionTypes.PRODUCT_LIST_SUCCESS;
-  payload: IProduct[];
+  payload: IServerProduct;
 }
 
 export interface IProductsListFail {
@@ -171,6 +177,8 @@ export interface IProductListState {
   readonly products: IProduct[];
   readonly loading: boolean;
   error: string;
+  page: number;
+  pages: number;
 }
 
 export interface IProductDetailsState {

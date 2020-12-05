@@ -14,6 +14,8 @@ const intialProductListState: IProductListState = {
   products: [],
   loading: false,
   error: "",
+  pages: 0,
+  page: 0,
 };
 
 export const productListReducer: Reducer<
@@ -33,7 +35,9 @@ export const productListReducer: Reducer<
         ...state,
         loading: false,
         error: "",
-        products: action.payload,
+        products: action.payload?.products,
+        pages: action.payload.pages,
+        page: action.payload.page,
       };
 
     case ProductActionTypes.PRODUCT_LIST_FAIL:

@@ -5,6 +5,7 @@ import {
   ProductActionTypes,
   ProductActions,
   IReview,
+  IServerProduct,
 } from "../types/productTypes";
 import { IApplicationState } from "./../store/store";
 import { IProduct } from "../types/productTypes";
@@ -16,14 +17,16 @@ export const listProducts: ActionCreator<
     string,
     ProductActions
   >
-> = (keyword: string = "") => async (dispatch: Dispatch) => {
+> = (keyword: string = "", pageNumber: string = "") => async (
+  dispatch: Dispatch
+) => {
   try {
     dispatch({
       type: ProductActionTypes.PRODUCT_LIST_REQUEST,
     });
 
-    const { data } = await axios.get<IProduct[]>(
-      `/api/products?keyword=${keyword}`
+    const { data } = await axios.get<IServerProduct>(
+      `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
     );
     dispatch({
       type: ProductActionTypes.PRODUCT_LIST_SUCCESS,

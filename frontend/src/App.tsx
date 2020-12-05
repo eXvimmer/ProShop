@@ -43,6 +43,12 @@ const App: FC = () => {
             <Route
               path="/admin/productlist"
               component={ProductListScreen}
+              exact
+            />
+            <Route
+              path="/admin/productlist/:pageNumber"
+              component={ProductListScreen}
+              exact
             />
             <Route
               path="/admin/orderlist"
@@ -60,7 +66,21 @@ const App: FC = () => {
              * /cart/:id? means that id is optional
              */}
             <Route path="/cart/:id?" component={CartScreen} />
-            <Route path="/search/:keyword" component={HomeScreen} />
+            <Route
+              path="/search/:keyword"
+              component={HomeScreen}
+              exact
+            />
+            <Route
+              exact
+              path="/page/:pageNumber"
+              component={HomeScreen}
+            />
+            <Route
+              exact
+              path="/search/:keyword/page/:pageNumber"
+              component={HomeScreen}
+            />
             <Route exact path="/" component={HomeScreen} />
           </Switch>
         </Container>
