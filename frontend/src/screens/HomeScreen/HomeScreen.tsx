@@ -14,6 +14,7 @@ import Loader from "./../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
 import { RouteComponentProps } from "react-router-dom";
 import Paginate from "../../components/Paginate/Paginate";
+import ProductCarousel from "../../components/ProductCarousel/ProductCarousel";
 
 const HomeScreen: FC<
   RouteComponentProps<{ keyword: string; pageNumber: string }>
@@ -50,6 +51,7 @@ const HomeScreen: FC<
 
   return (
     <Fragment>
+      {!keyword && <ProductCarousel />}
       <h1>Latest Products</h1>
       {loading ? (
         <Loader />

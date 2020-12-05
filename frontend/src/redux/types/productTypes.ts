@@ -49,6 +49,9 @@ export enum ProductActionTypes {
   PRODUCT_CREATE_REVIEW_SUCCESS = "PRODUCT_CREATE_REVIEW_SUCCESS",
   PRODUCT_CREATE_REVIEW_FAIL = "PRODUCT_CREATE_REVIEW_FAIL",
   PRODUCT_CREATE_REVIEW_RESET = "PRODUCT_CREATE_REVIEW_RESET",
+  PRODUCT_TOP_REQUEST = "PRODUCT_TOP_REQUEST",
+  PRODUCT_TOP_SUCCESS = "PRODUCT_TOP_SUCCESS",
+  PRODUCT_TOP_FAIL = "PRODUCT_TOP_FAIL",
 }
 
 export interface IProductsListRequest {
@@ -149,6 +152,20 @@ export interface IProductCreateReviewReset {
   type: ProductActionTypes.PRODUCT_CREATE_REVIEW_RESET;
 }
 
+export interface IProductTopRequest {
+  type: ProductActionTypes.PRODUCT_TOP_REQUEST;
+}
+
+export interface IProductTopSuccess {
+  type: ProductActionTypes.PRODUCT_TOP_SUCCESS;
+  payload: IProduct[];
+}
+
+export interface IProductTopFail {
+  type: ProductActionTypes.PRODUCT_TOP_FAIL;
+  payload: string;
+}
+
 export type ProductActions =
   | IProductsListRequest
   | IProductsListSuccess
@@ -171,7 +188,10 @@ export type ProductActions =
   | IProductCreateReviewRequest
   | IProductCreateReviewSuccess
   | IProductCreateReviewFail
-  | IProductCreateReviewReset;
+  | IProductCreateReviewReset
+  | IProductTopRequest
+  | IProductTopSuccess
+  | IProductTopFail;
 
 export interface IProductListState {
   readonly products: IProduct[];
@@ -210,5 +230,11 @@ export interface IProductUpdateState {
 export interface IProductReviewState {
   loading: boolean;
   success: boolean;
+  error: string;
+}
+
+export interface IProductTopState {
+  loading: boolean;
+  products: IProduct[];
   error: string;
 }
