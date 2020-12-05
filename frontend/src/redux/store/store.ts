@@ -15,6 +15,7 @@ import {
   IProductDetailsState,
   IProductListState,
   IProductUpdateState,
+  IProductReviewState,
 } from "../types/productTypes";
 import { ICartAddress, ICartState } from "../types/cartTypes";
 import {
@@ -40,6 +41,7 @@ export interface IApplicationState {
   productDetails: IProductDetailsState;
   productCreate: IProductCreateState;
   productUpdate: IProductUpdateState;
+  productCreateReview: IProductReviewState;
   productDelete: IProductDeleteState;
   cart: ICartState;
   userLogin: IUserLoginState;

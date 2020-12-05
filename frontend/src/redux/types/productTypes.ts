@@ -9,6 +9,15 @@ export interface IProduct {
   countInStock: number;
   rating: number;
   numReviews: number;
+  reviews?: IReview[];
+}
+
+export interface IReview {
+  _id?: string;
+  name?: string;
+  createdAt?: Date;
+  rating: number;
+  comment: string;
 }
 
 export enum ProductActionTypes {
@@ -30,6 +39,10 @@ export enum ProductActionTypes {
   PRODUCT_UPDATE_SUCCESS = "PRODUCT_UPDATE_SUCCESS",
   PRODUCT_UPDATE_FAIL = "PRODUCT_UPDATE_FAIL",
   PRODUCT_UPDATE_RESET = "PRODUCT_UPDATE_RESET",
+  PRODUCT_CREATE_REVIEW_REQUEST = "PRODUCT_CREATE_REVIEW_REQUEST",
+  PRODUCT_CREATE_REVIEW_SUCCESS = "PRODUCT_CREATE_REVIEW_SUCCESS",
+  PRODUCT_CREATE_REVIEW_FAIL = "PRODUCT_CREATE_REVIEW_FAIL",
+  PRODUCT_CREATE_REVIEW_RESET = "PRODUCT_CREATE_REVIEW_RESET",
 }
 
 export interface IProductsListRequest {
@@ -113,6 +126,23 @@ export interface IProductUpdateReset {
   type: ProductActionTypes.PRODUCT_UPDATE_RESET;
 }
 
+export interface IProductCreateReviewRequest {
+  type: ProductActionTypes.PRODUCT_CREATE_REVIEW_REQUEST;
+}
+
+export interface IProductCreateReviewSuccess {
+  type: ProductActionTypes.PRODUCT_CREATE_REVIEW_SUCCESS;
+}
+
+export interface IProductCreateReviewFail {
+  type: ProductActionTypes.PRODUCT_CREATE_REVIEW_FAIL;
+  payload: string;
+}
+
+export interface IProductCreateReviewReset {
+  type: ProductActionTypes.PRODUCT_CREATE_REVIEW_RESET;
+}
+
 export type ProductActions =
   | IProductsListRequest
   | IProductsListSuccess
@@ -131,7 +161,11 @@ export type ProductActions =
   | IProductUpdateRequest
   | IProductUpdateSuccess
   | IProductUpdateFail
-  | IProductUpdateReset;
+  | IProductUpdateReset
+  | IProductCreateReviewRequest
+  | IProductCreateReviewSuccess
+  | IProductCreateReviewFail
+  | IProductCreateReviewReset;
 
 export interface IProductListState {
   readonly products: IProduct[];
@@ -163,4 +197,10 @@ export interface IProductUpdateState {
   success: boolean;
   error: string;
   product: IProduct | null;
+}
+
+export interface IProductReviewState {
+  loading: boolean;
+  success: boolean;
+  error: string;
 }
