@@ -5,6 +5,7 @@ import {
   orderCreateReducer,
   orderDetailsReducer,
   orderListMyReducer,
+  orderListReducer,
   orderPayReducer,
 } from "./orderReducers";
 import {
@@ -41,6 +42,7 @@ const rootReducer = combineReducers<IApplicationState>({
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
   orderPay: orderPayReducer,
+  orderList: orderListReducer,
   orderListMy: orderListMyReducer,
 });
 

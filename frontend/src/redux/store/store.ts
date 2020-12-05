@@ -30,6 +30,7 @@ import {
   IOrderCreateState,
   IOrderDetailsState,
   IOrderListMyState,
+  IOrderListState,
   IOrderPayState,
 } from "../types/orderTypes";
 
@@ -50,6 +51,7 @@ export interface IApplicationState {
   orderCreate: IOrderCreateState;
   orderDetails: IOrderDetailsState;
   orderPay: IOrderPayState;
+  orderList: IOrderListState;
   orderListMy: IOrderListMyState;
 }
 

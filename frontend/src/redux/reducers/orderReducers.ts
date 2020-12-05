@@ -3,6 +3,7 @@ import {
   IOrderCreateState,
   IOrderDetailsState,
   IOrderListMyState,
+  IOrderListState,
   IOrderPayState,
   OrderActions,
   OrderActionTypes,
@@ -178,6 +179,42 @@ export const orderListMyReducer: Reducer<
         loading: false,
         error: "",
         orders: [],
+      };
+
+    default:
+      return state;
+  }
+};
+
+const intialOrderList: IOrderListState = {
+  orders: [],
+  loading: false,
+  error: "",
+};
+
+export const orderListReducer: Reducer<
+  IOrderListState,
+  OrderActions
+> = (state = intialOrderList, action) => {
+  switch (action.type) {
+    case OrderActionTypes.ORDER_LIST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case OrderActionTypes.ORDER_LIST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        orders: action.payload,
+      };
+
+    case OrderActionTypes.ORDER_LIST_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
 
     default:

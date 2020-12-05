@@ -48,6 +48,9 @@ export enum OrderActionTypes {
   ORDER_LIST_MY_SUCCESS = "ORDER_LIST_MY_SUCCESS",
   ORDER_LIST_MY_FAIL = "ORDER_LIST_MY_FAIL",
   ORDER_LIST_MY_RESET = "ORDER_LIST_MY_RESET",
+  ORDER_LIST_REQUEST = "ORDER_LIST_REQUEST",
+  ORDER_LIST_SUCCESS = "ORDER_LIST_SUCCESS",
+  ORDER_LIST_FAIL = "ORDER_LIST_FAIL",
 }
 
 export interface IOrderCreateRequest {
@@ -114,6 +117,20 @@ export interface IOrderListMyReset {
   type: OrderActionTypes.ORDER_LIST_MY_RESET;
 }
 
+export interface IOrderListRequest {
+  type: OrderActionTypes.ORDER_LIST_REQUEST;
+}
+
+export interface IOrderListSuccess {
+  type: OrderActionTypes.ORDER_LIST_SUCCESS;
+  payload: IOrder[];
+}
+
+export interface IOrderListFail {
+  type: OrderActionTypes.ORDER_LIST_FAIL;
+  payload: string;
+}
+
 export type OrderActions =
   | IOrderCreateRequest
   | IOrderCreateSuccess
@@ -128,7 +145,10 @@ export type OrderActions =
   | IOrderListMyRequest
   | IOrderListMySuccess
   | IOrderListMyFail
-  | IOrderListMyReset;
+  | IOrderListMyReset
+  | IOrderListRequest
+  | IOrderListSuccess
+  | IOrderListFail;
 
 export interface IOrderCreateState {
   loading: boolean;
@@ -152,6 +172,12 @@ export interface IOrderPayState {
 }
 
 export interface IOrderListMyState {
+  orders: IOrder[];
+  loading: boolean;
+  error: string;
+}
+
+export interface IOrderListState {
   orders: IOrder[];
   loading: boolean;
   error: string;
