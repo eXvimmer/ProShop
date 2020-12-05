@@ -1,5 +1,12 @@
 import React, { FC, Fragment, useEffect, useState } from "react";
-import { Card, Col, Image, ListGroup, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Image,
+  ListGroup,
+  Row,
+} from "react-bootstrap";
 import axios from "axios";
 import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,21 +16,24 @@ import Message from "../../components/Message/Message";
 import { IApplicationState } from "../../redux/store/store";
 import {
   IOrder,
+  IOrderDeliverState,
   IOrderDetailsState,
   IOrderPayState,
   IPaymentResult,
   OrderActionTypes,
 } from "../../redux/types/orderTypes";
 import {
+  deliverOrder,
   getOrderDetails,
   payOrder,
 } from "./../../redux/actions/orderActions";
-// import { IUserLoginState } from "../../redux/types/userTypes";
+import { IUserLoginState } from "../../redux/types/userTypes";
 
 const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
   match: {
     params: { id: orderId },
   },
+  history,
 }) => {
   const [sdkReady, setSdkReady] = useState(false);
   const [clientId, setClientId] = useState("");
@@ -48,17 +58,27 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
 
   const { error, loading, order } = orderDetails;
 
-  // const userLogin = useSelector<IApplicationState, IUserLoginState>(
-  //   state => state.userLogin
-  // );
+  const userLogin = useSelector<IApplicationState, IUserLoginState>(
+    state => state.userLogin
+  );
 
-  // const { userInfo } = userLogin;
+  const { userInfo } = userLogin;
 
   const orderPay = useSelector<IApplicationState, IOrderPayState>(
     state => state.orderPay
   );
 
   const { success: successPay, loading: loadingPay } = orderPay;
+
+  const orderDeliver = useSelector<
+    IApplicationState,
+    IOrderDeliverState
+  >(state => state.orderDeliver);
+
+  const {
+    success: successDeliver,
+    loading: loadingDeliver,
+  } = orderDeliver;
 
   if (!loading && order) {
     order.itemsPrice = order.orderItems.reduce(
@@ -68,6 +88,10 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
   }
 
   useEffect(() => {
+    if (!userInfo) {
+      history.push("/login");
+    }
+
     const getClientId = async () => {
       const { data: clientId } = await axios.get<string>(
         `/api/config/paypal`
@@ -75,7 +99,7 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
       setClientId(clientId);
     };
     getClientId();
-  }, [clientId]);
+  }, [clientId, history, userInfo]);
 
   useEffect(() => {
     const addPayPalScript = async () => {
@@ -90,8 +114,9 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
       document.body.appendChild(script);
     };
 
-    if (!order || successPay) {
+    if (!order || successPay || successDeliver) {
       dispatch({ type: OrderActionTypes.ORDER_PAY_RESET });
+      dispatch({ type: OrderActionTypes.ORDER_DELIVER_RESET });
       dispatch(getOrderDetails(orderId));
     } else if (!order.isPaid) {
       if (!(window as any).paypal) {
@@ -100,7 +125,26 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
         setSdkReady(true);
       }
     }
-  }, [dispatch, orderId, successPay, order, clientId]);
+  }, [
+    dispatch,
+    orderId,
+    successPay,
+    order,
+    clientId,
+    successDeliver,
+  ]);
+
+  const successPaymentHandler = (
+    paymentResult: IPaymentResult = fakePaymentResult
+  ) => {
+    dispatch(payOrder(orderId, paymentResult));
+  };
+
+  const deliverHandler = () => {
+    if (order) {
+      dispatch(deliverOrder(order));
+    }
+  };
 
   const loadUserDetails = (order: IOrder) => {
     if (order.user) {
@@ -120,12 +164,6 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
     } else {
       return null;
     }
-  };
-
-  const successPaymentHandler = (
-    paymentResult: IPaymentResult = fakePaymentResult
-  ) => {
-    dispatch(payOrder(orderId, paymentResult));
   };
 
   return loading ? (
@@ -279,6 +317,21 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({
                   )}
                 </ListGroup.Item>
               )}
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliverHandler}
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>

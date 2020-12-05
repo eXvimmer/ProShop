@@ -3,6 +3,7 @@ import { IApplicationState } from "../store/store";
 import { cartReducer } from "./cartReducers";
 import {
   orderCreateReducer,
+  orderDeliverReducer,
   orderDetailsReducer,
   orderListMyReducer,
   orderListReducer,
@@ -42,6 +43,7 @@ const rootReducer = combineReducers<IApplicationState>({
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
   orderPay: orderPayReducer,
+  orderDeliver: orderDeliverReducer,
   orderList: orderListReducer,
   orderListMy: orderListMyReducer,
 });

@@ -1,6 +1,7 @@
 import { Reducer } from "redux";
 import {
   IOrderCreateState,
+  IOrderDeliverState,
   IOrderDetailsState,
   IOrderListMyState,
   IOrderListState,
@@ -142,7 +143,7 @@ export const orderPayReducer: Reducer<
   }
 };
 
-const intialOrderMyList: IOrderListMyState = {
+const initialOrderMyList: IOrderListMyState = {
   orders: [],
   loading: false,
   error: "",
@@ -151,7 +152,7 @@ const intialOrderMyList: IOrderListMyState = {
 export const orderListMyReducer: Reducer<
   IOrderListMyState,
   OrderActions
-> = (state = intialOrderMyList, action) => {
+> = (state = initialOrderMyList, action) => {
   switch (action.type) {
     case OrderActionTypes.ORDER_LIST_MY_REQUEST:
       return {
@@ -186,7 +187,7 @@ export const orderListMyReducer: Reducer<
   }
 };
 
-const intialOrderList: IOrderListState = {
+const initialOrderList: IOrderListState = {
   orders: [],
   loading: false,
   error: "",
@@ -195,7 +196,7 @@ const intialOrderList: IOrderListState = {
 export const orderListReducer: Reducer<
   IOrderListState,
   OrderActions
-> = (state = intialOrderList, action) => {
+> = (state = initialOrderList, action) => {
   switch (action.type) {
     case OrderActionTypes.ORDER_LIST_REQUEST:
       return {
@@ -216,6 +217,45 @@ export const orderListReducer: Reducer<
         loading: false,
         error: action.payload,
       };
+
+    default:
+      return state;
+  }
+};
+
+const initialOrderDeliverState: IOrderDeliverState = {
+  loading: false,
+  error: "",
+  success: false,
+};
+
+export const orderDeliverReducer: Reducer<
+  IOrderDeliverState,
+  OrderActions
+> = (state = initialOrderDeliverState, action) => {
+  switch (action.type) {
+    case OrderActionTypes.ORDER_DELIVER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case OrderActionTypes.ORDER_DELIVER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
+
+    case OrderActionTypes.ORDER_DELIVER_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case OrderActionTypes.ORDER_DELIVER_RESET:
+      return initialOrderDeliverState;
 
     default:
       return state;
