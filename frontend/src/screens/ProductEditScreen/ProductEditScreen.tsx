@@ -4,10 +4,12 @@ import React, {
   useEffect,
   FormEvent,
   Fragment,
+  ChangeEvent,
 } from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Button } from "react-bootstrap";
+import axios from "axios";
 import FormContainer from "../../components/FormContainer/FormContainer";
 import { IApplicationState } from "../../redux/store/store";
 import Message from "../../components/Message/Message";
@@ -37,6 +39,7 @@ const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const dispatch: ThunkDispatch<
     IApplicationState,
@@ -102,6 +105,36 @@ const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({
     );
   };
 
+  const uploadFileHandler = async (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files![0];
+
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const { data } = await axios.post<string>(
+        `/api/uploads`,
+        formData,
+        config
+      );
+
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      console.log(error);
+      setUploading(false);
+    }
+  };
+
   return (
     <Fragment>
       <Link to="/admin/productlist" className="btn btn-light my-3">
@@ -146,6 +179,13 @@ const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({
                 onChange={e => setImage(e.target.value)}
               ></Form.Control>
             </Form.Group>
+            <Form.File
+              id="image-file"
+              label="Choose File"
+              custom
+              onChange={uploadFileHandler}
+            ></Form.File>
+            {uploading && <Loader />}
             <Form.Group controlId="brand">
               <Form.Label>Brand</Form.Label>
               <Form.Control
