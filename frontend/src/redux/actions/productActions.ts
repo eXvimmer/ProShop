@@ -10,14 +10,21 @@ import { IApplicationState } from "./../store/store";
 import { IProduct } from "../types/productTypes";
 
 export const listProducts: ActionCreator<
-  ThunkAction<Promise<void>, IApplicationState, null, ProductActions>
-> = () => async (dispatch: Dispatch) => {
+  ThunkAction<
+    Promise<void>,
+    IApplicationState,
+    string,
+    ProductActions
+  >
+> = (keyword: string = "") => async (dispatch: Dispatch) => {
   try {
     dispatch({
       type: ProductActionTypes.PRODUCT_LIST_REQUEST,
     });
 
-    const { data } = await axios.get<IProduct[]>("/api/products");
+    const { data } = await axios.get<IProduct[]>(
+      `/api/products?keyword=${keyword}`
+    );
     dispatch({
       type: ProductActionTypes.PRODUCT_LIST_SUCCESS,
       payload: data,

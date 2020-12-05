@@ -4,13 +4,21 @@ import Product from "../models/productModel.js";
 
 /* ANCHOR
  * @DESC Fetch all products
- * @ROUTE Get /api/products
+ * @ROUTE Get /api/products?keyword=phone
  * @ACCESS Public
  */
 export const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
-  // res.status(401);
-  // throw new Error("NOT Authorized");
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
+
+  const products = await Product.find({ ...keyword });
+
   res.json(products);
 });
 

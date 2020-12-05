@@ -1,10 +1,12 @@
 import React, { FC } from "react";
+import { Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { IApplicationState } from "../../redux/store/store";
 import { IUserLoginState } from "../../redux/types/userTypes";
 import { logout } from "../../redux/actions/userActions";
+import SearchBox from "../SearchBox/SearchBox";
 
 const Header: FC = () => {
   const userLogin = useSelector<IApplicationState, IUserLoginState>(
@@ -28,6 +30,15 @@ const Header: FC = () => {
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
+            <Route
+              render={({ history, match, location }) => (
+                <SearchBox
+                  history={history}
+                  match={match}
+                  location={location}
+                />
+              )}
+            />
             <Nav className="ml-auto">
               <LinkContainer to="/cart">
                 <Nav.Link>

@@ -60,6 +60,7 @@ const App: FC = () => {
              * /cart/:id? means that id is optional
              */}
             <Route path="/cart/:id?" component={CartScreen} />
+            <Route path="/search/:keyword" component={HomeScreen} />
             <Route exact path="/" component={HomeScreen} />
           </Switch>
         </Container>

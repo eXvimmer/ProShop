@@ -12,8 +12,13 @@ import { IApplicationState } from "../../redux/store/store";
 import { ThunkDispatch } from "redux-thunk";
 import Loader from "./../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
+import { RouteComponentProps } from "react-router-dom";
 
-const HomeScreen: FC = () => {
+const HomeScreen: FC<RouteComponentProps<{ keyword: string }>> = ({
+  match: {
+    params: { keyword },
+  },
+}) => {
   /* NOTE
    * We use useDispatch and dispatch the desired action.
    * This is an alternative for connecting the function to
@@ -21,7 +26,7 @@ const HomeScreen: FC = () => {
    */
   const dispatch: ThunkDispatch<
     IApplicationState,
-    null,
+    any,
     ProductActions
   > = useDispatch();
   /* NOTE
@@ -38,8 +43,8 @@ const HomeScreen: FC = () => {
   const { error, loading, products } = productList;
 
   useEffect(() => {
-    dispatch(listProducts());
-  }, [dispatch]);
+    dispatch(listProducts(keyword));
+  }, [dispatch, keyword]);
 
   return (
     <Fragment>
