@@ -33,6 +33,7 @@ import {
 } from "../../redux/actions/productActions";
 import Message from "../../components/Message/Message";
 import { IUserLoginState } from "../../redux/types/userTypes";
+import Meta from "../../components/Meta/Meta";
 
 const ProductScreen: FC<RouteComponentProps<{ id: string }>> = ({
   match: {
@@ -109,6 +110,7 @@ const ProductScreen: FC<RouteComponentProps<{ id: string }>> = ({
     } else if (product) {
       return (
         <Fragment>
+          <Meta title={product.name} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />

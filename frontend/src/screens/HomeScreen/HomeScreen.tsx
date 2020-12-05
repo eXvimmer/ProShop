@@ -12,9 +12,10 @@ import { IApplicationState } from "../../redux/store/store";
 import { ThunkDispatch } from "redux-thunk";
 import Loader from "./../../components/Loader/Loader";
 import Message from "../../components/Message/Message";
-import { RouteComponentProps } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
 import Paginate from "../../components/Paginate/Paginate";
 import ProductCarousel from "../../components/ProductCarousel/ProductCarousel";
+import Meta from "../../components/Meta/Meta";
 
 const HomeScreen: FC<
   RouteComponentProps<{ keyword: string; pageNumber: string }>
@@ -51,7 +52,14 @@ const HomeScreen: FC<
 
   return (
     <Fragment>
-      {!keyword && <ProductCarousel />}
+      <Meta title="HOME" />
+      {!keyword ? (
+        <ProductCarousel />
+      ) : (
+        <Link to="/" className="btn btn-light">
+          Go Back
+        </Link>
+      )}
       <h1>Latest Products</h1>
       {loading ? (
         <Loader />
